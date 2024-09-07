@@ -205,6 +205,80 @@ class Manager implements IManager {
 	}
 
 	/**
+	 * @since 31.0.0
+	 * @throws \OCP\DB\Exception
+	 */
+	public function handleIMipRequest(
+		string $principalUri,
+		string $sender,
+		string $recipient,
+		string $calendarData,
+	): bool {
+		// determine if user has any calendars
+		$userCalendars = $this->getCalendarsForPrincipal($principalUri);
+		if (empty($userCalendars)) {
+			$this->logger->warning('Could not find any calendars for principal ' . $principalUri);
+			return false;
+		}
+		// convert calendar string data to calendar object
+		/** @var VCalendar $vObject|null */
+		$calendarObject = Reader::read($calendarData);
+		// determine if event has the correct method
+		if (!isset($calendarObject->METHOD) || $calendarObject->METHOD->getValue() !== 'REQUEST') {
+			$this->logger->warning('iMip message event contains an incorrect or invalid method');
+			return false;
+		}
+		// determine if calendar object contains any events
+		if (!isset($calendarObject->VEVENT)) {
+			$this->logger->warning('iMip message contains an no event');
+			return false;
+		}
+		// extract event(s)
+		$eventObject = $calendarObject->VEVENT;
+		// determine if event contains a uid
+		if (!isset($eventObject->UID)) {
+			$this->logger->warning('iMip message event dose not contains a UID');
+			return false;
+		}
+		// determine if event contains any attendees
+		if (!isset($eventObject->ATTENDEE)) {
+			$this->logger->warning('iMip message event dose not contains any attendees');
+			return false;
+		}
+		// determine if any of the attendees are the recipient
+		foreach ($eventObject->ATTENDEE as $entry) {
+			$address = trim(str_replace('mailto:', '', $entry->getValue()));
+			if ($address === $recipient) {
+				$attendee = $address;
+				break;
+			}
+		}
+		if (!isset($attendee)) {
+			$this->logger->warning('iMip message event does not contain a attendee that matches the recipient');
+			return false;
+		}
+		// find event in calendar and update it
+		foreach ($userCalendars as $calendar) {
+			// determine if calendar is deleted, shared, or read only and ignore
+			if ($calendar->isDeleted() || !$calendar->isWritable() || $calendar->isShared()) {
+				continue;
+			}
+			// find event and update it
+			if (!empty($calendar->search($recipient, ['ATTENDEE'], ['uid' => $eventObject->UID->getValue()]))) {
+				try {
+					$calendar->handleIMipMessage('', $calendarData); // sabre will handle the scheduling behind the scenes
+					return true;
+				} catch (CalendarException $e) {
+					$this->logger->error('Could not update calendar for iMIP processing', ['exception' => $e]);
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @throws \OCP\DB\Exception
 	 */
 	public function handleIMipReply(

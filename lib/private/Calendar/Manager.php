@@ -217,7 +217,7 @@ class Manager implements IManager {
 		// determine if user has any calendars
 		$userCalendars = $this->getCalendarsForPrincipal($principalUri);
 		if (empty($userCalendars)) {
-			$this->logger->warning('Could not find any calendars for principal ' . $principalUri);
+			$this->logger->warning('iMip message could not be processed because user has on calendars');
 			return false;
 		}
 		// convert calendar string data to calendar object
@@ -225,7 +225,7 @@ class Manager implements IManager {
 		$calendarObject = Reader::read($calendarData);
 		// determine if event has the correct method
 		if (!isset($calendarObject->METHOD) || $calendarObject->METHOD->getValue() !== 'REQUEST') {
-			$this->logger->warning('iMip message event contains an incorrect or invalid method');
+			$this->logger->warning('iMip message contains an incorrect or invalid method');
 			return false;
 		}
 		// determine if calendar object contains any events
@@ -266,15 +266,18 @@ class Manager implements IManager {
 			// find event and update it
 			if (!empty($calendar->search($recipient, ['ATTENDEE'], ['uid' => $eventObject->UID->getValue()]))) {
 				try {
-					$calendar->handleIMipMessage('', $calendarData); // sabre will handle the scheduling behind the scenes
+					if ($calendar instanceof IHandleImipMessage) {
+						$calendar->handleIMipMessage('', $calendarData); // sabre will handle the scheduling behind the scenes
+					}
 					return true;
 				} catch (CalendarException $e) {
-					$this->logger->error('Could not update calendar for iMIP processing', ['exception' => $e]);
+					$this->logger->error('An error occurred while processing the iMip message event', ['exception' => $e]);
 					return false;
 				}
 			}
 		}
-
+		// if we got this far, log the attempt and exit
+		$this->logger->warning('iMip message event could not be processed because the no corresponding event was found in any calendar');
 		return false;
 	}
 

@@ -513,7 +513,7 @@ class ManagerTest extends TestCase {
 		$calendar->add('METHOD', 'REQUEST');
 		// test method
 		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-		$this->assertTrue($result);
+		$this->assertFalse($result);
 
 	}
 

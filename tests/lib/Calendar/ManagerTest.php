@@ -266,7 +266,7 @@ class ManagerTest extends TestCase {
 			->getMock();
 		// construct logger returns
 		$this->logger->expects(self::once())->method('warning')
-			->with('Could not find any calendars for principal principals/user/attendee1');
+			->with('iMip message could not be processed because user has on calendars');
 		// construct parameters
 		$principalUri = 'principals/user/attendee1';
 		$sender = 'organizer@testing.com';
@@ -298,7 +298,7 @@ class ManagerTest extends TestCase {
 			->willReturn([$userCalendar]);
 		// construct logger returns
 		$this->logger->expects(self::once())->method('warning')
-			->with('iMip message event contains an incorrect or invalid method');
+			->with('iMip message contains an incorrect or invalid method');
 		// construct parameters
 		$principalUri = 'principals/user/attendee1';
 		$sender = 'organizer@testing.com';
@@ -329,7 +329,7 @@ class ManagerTest extends TestCase {
 			->willReturn([$userCalendar]);
 		// construct logger returns
 		$this->logger->expects(self::once())->method('warning')
-			->with('iMip message event contains an incorrect or invalid method');
+			->with('iMip message contains an incorrect or invalid method');
 		// construct parameters
 		$principalUri = 'principals/user/attendee1';
 		$sender = 'organizer@testing.com';

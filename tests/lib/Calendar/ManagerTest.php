@@ -472,6 +472,51 @@ class ManagerTest extends TestCase {
 	
 	}
 
+	public function testHandleImipRequestWithNoMatch(): void {
+		// construct mock user calendar
+		$userCalendar = $this->createMock(CalendarImpl::class);
+		$userCalendar->expects(self::once())
+			->method('isDeleted')
+			->willReturn(false);
+		$userCalendar->expects(self::once())
+			->method('isWritable')
+			->willReturn(true);
+		$userCalendar->expects(self::once())
+			->method('isShared')
+			->willReturn(false);
+		$userCalendar->expects(self::once())
+			->method('search')
+			->willReturn([]);
+		// construct mock calendar manager and returns
+		$manager = $this->getMockBuilder(Manager::class)
+			->setConstructorArgs([
+				$this->coordinator,
+				$this->container,
+				$this->logger,
+				$this->time
+			])
+			->setMethods([
+				'getCalendarsForPrincipal'
+			])
+			->getMock();
+		$manager->expects(self::once())
+			->method('getCalendarsForPrincipal')
+			->willReturn([$userCalendar]);
+		// construct logger returns
+		$this->logger->expects(self::once())->method('warning')
+			->with('iMip message event could not be processed because the no corresponding event was found in any calendar');
+		// construct parameters
+		$principalUri = 'principals/user/attendee1';
+		$sender = 'organizer@testing.com';
+		$recipient = 'attendee1@testing.com';
+		$calendar = $this->vCalendar1a;
+		$calendar->add('METHOD', 'REQUEST');
+		// test method
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertTrue($result);
+
+	}
+
 	public function testHandleImipRequest(): void {
 		// construct mock user calendar
 		$userCalendar = $this->createMock(CalendarImpl::class);

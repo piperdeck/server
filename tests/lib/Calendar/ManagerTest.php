@@ -274,8 +274,8 @@ class ManagerTest extends TestCase {
 		$calendar = $this->vCalendar1a;
 		$calendar->add('METHOD', 'REQUEST');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithNoMethod(): void {
@@ -305,8 +305,8 @@ class ManagerTest extends TestCase {
 		$recipient = 'attendee1@testing.com';
 		$calendar = $this->vCalendar1a;
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithInvalidMethod(): void {
@@ -337,8 +337,8 @@ class ManagerTest extends TestCase {
 		$calendar = $this->vCalendar1a;
 		$calendar->add('METHOD', 'CANCEL');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithNoEvent(): void {
@@ -370,8 +370,8 @@ class ManagerTest extends TestCase {
 		$calendar->add('METHOD', 'REQUEST');
 		$calendar->remove('VEVENT');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithNoUid(): void {
@@ -403,8 +403,8 @@ class ManagerTest extends TestCase {
 		$calendar->add('METHOD', 'REQUEST');
 		$calendar->VEVENT->remove('UID');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithNoAttendee(): void {
@@ -436,8 +436,8 @@ class ManagerTest extends TestCase {
 		$calendar->add('METHOD', 'REQUEST');
 		$calendar->VEVENT->remove('ATTENDEE');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithInvalidAttendee(): void {
@@ -468,8 +468,8 @@ class ManagerTest extends TestCase {
 		$calendar = $this->vCalendar1a;
 		$calendar->add('METHOD', 'REQUEST');
 		// test method
-		$manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
-	
+		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
+		$this->assertFalse($result);
 	}
 
 	public function testHandleImipRequestWithNoMatch(): void {
@@ -514,7 +514,6 @@ class ManagerTest extends TestCase {
 		// test method
 		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
 		$this->assertFalse($result);
-
 	}
 
 	public function testHandleImipRequest(): void {
@@ -560,7 +559,6 @@ class ManagerTest extends TestCase {
 		// test method
 		$result = $manager->handleIMipRequest($principalUri, $sender, $recipient, $calendar->serialize());
 		$this->assertTrue($result);
-
 	}
 
 	public function testHandleImipReplyWrongMethod(): void {

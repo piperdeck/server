@@ -85,10 +85,10 @@ use OCP\Defaults;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserAddedEvent;
 use OCP\Group\Events\UserRemovedEvent;
+use OCP\IServerContainer;
+use OCP\Settings\Events\DeclarativeSettingsGetValueEvent;
 use OCP\Settings\Events\DeclarativeSettingsRegisterFormEvent;
 use OCP\Settings\Events\DeclarativeSettingsSetValueEvent;
-use OCP\Settings\Events\DeclarativeSettingsGetValueEvent;
-use OCP\IServerContainer;
 use OCP\Settings\IManager;
 use OCP\Util;
 

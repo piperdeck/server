@@ -13,9 +13,9 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\DeclarativeSettingsTypes;
+use OCP\Settings\Events\DeclarativeSettingsGetValueEvent;
 use OCP\Settings\Events\DeclarativeSettingsRegisterFormEvent;
 use OCP\Settings\Events\DeclarativeSettingsSetValueEvent;
-use OCP\Settings\Events\DeclarativeSettingsGetValueEvent;
 
 /** @template-implements IEventListener<DeclarativeSettingsRegisterFormEvent> */
 class MailSettingsEventListener implements IEventListener {

@@ -28,20 +28,23 @@ class MailSettingsEventListener implements IEventListener {
 
 	public function handle(Event $event): void {
 
+		if ($event instanceof DeclarativeSettingsRegisterFormEvent) {
+			$this->handleRegister($event);
+			return;
+		}
+
 		if ($event->getApp() !== Application::APP_ID) {
 			return;
 		}
 
-		if ($event instanceof DeclarativeSettingsRegisterFormEvent) {
-			$this->handleRegister($event);
-		}
-
 		if ($event instanceof DeclarativeSettingsGetValueEvent) {
 			$this->handleGetValue($event);
+			return;
 		}
 
 		if ($event instanceof DeclarativeSettingsSetValueEvent) {
 			$this->handleSetValue($event);
+			return;
 		}
 		
 	}
@@ -50,20 +53,29 @@ class MailSettingsEventListener implements IEventListener {
 
 		$event->registerSchema(Application::APP_ID, [
 			'id' => 'mail-provider-support',
-			'priority' => 10,
+			'priority' => 11,
 			'section_type' => DeclarativeSettingsTypes::SECTION_TYPE_ADMIN,
 			'section_id' => 'server',
 			'storage_type' => DeclarativeSettingsTypes::STORAGE_TYPE_EXTERNAL,
 			'title' => $this->l->t('System Mails'),
-			'description' => $this->l->t('Allow to restrict filenames to ensure files can be synced with all clients. By default all filenames valid on POSIX (e.g. Linux or macOS) are allowed.'),
+			'description' => $this->l->t('System e-mails are messages generated automatically by Nextcloud. They are sent for example when a share is created or when inviting attendees to a calendar event..'),
 
 			'fields' => [
 				[
-					'id' => 'mail_providers_enabled',
-					'title' => $this->l->t('Allow system to use configured user mail accounts'),
-					'description' => $this->l->t('This will block filenames not valid on Windows systems, like using reserved names or special characters. But this will not enforce compatibility of case sensitivity.'),
-					'type' => DeclarativeSettingsTypes::CHECKBOX,
-					'default' => false,
+					'id' => 'mail_providers_disabled',
+					'title' => $this->l->t('Send system e-mails using'),
+					'type' => DeclarativeSettingsTypes::RADIO,
+					'default' => 0,
+					'options' => [
+						[
+							'name' => $this->l->t('People\'s configured mail account'),
+							'value' => 0
+						],
+						[
+							'name' => $this->l->t('System account'),
+							'value' => 1
+						],
+					],
 				],
 			],
 		]);
@@ -74,7 +86,7 @@ class MailSettingsEventListener implements IEventListener {
 		
 		$event->setValue(
 			match($event->getFieldId()) {
-				'mail_providers_enabled' => $this->config->getValueBool('core', 'mail_providers_enabled', true),
+				'mail_providers_disabled' => $this->config->getSystemValueInt('mail_providers_disabled', 0),
 			}
 		);
 
@@ -83,8 +95,8 @@ class MailSettingsEventListener implements IEventListener {
 	private function handleSetValue(Event $event) {
 
 		switch ($event->getFieldId()) {
-			case 'mail_providers_enabled':
-				$this->config->setValueBool('core', 'mail_providers_enabled', (bool)$event->getValue());
+			case 'mail_providers_disabled':
+				$this->config->setSystemValue('mail_providers_disabled', $event->getValue());
 				$event->stopPropagation();
 				break;
 		}

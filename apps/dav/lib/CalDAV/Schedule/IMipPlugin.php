@@ -267,12 +267,14 @@ class IMipPlugin extends SabreIMipPlugin {
 		$mailService = null;
 
 		try {
-			// retrieve user object
-			$user = $this->userSession->getUser();
-			// evaluate if user object exist
-			if ($user !== null) {
-				// retrieve appropriate service with the same address as sender
-				$mailService = $this->mailManager->findServiceByAddress($user->getUID(), $sender);
+			if ($this->config->getSystemValueInt('mail_providers_disabled', 0) === 0) {
+				// retrieve user object
+				$user = $this->userSession->getUser();
+				// evaluate if user object exist
+				if ($user !== null) {
+					// retrieve appropriate service with the same address as sender
+					$mailService = $this->mailManager->findServiceByAddress($user->getUID(), $sender);
+				}
 			}
 			// evaluate if a mail service was found and has sending capabilities
 			if ($mailService !== null && $mailService instanceof IMessageSend) {

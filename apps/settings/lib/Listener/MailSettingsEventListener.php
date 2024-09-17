@@ -17,7 +17,7 @@ use OCP\Settings\Events\DeclarativeSettingsGetValueEvent;
 use OCP\Settings\Events\DeclarativeSettingsRegisterFormEvent;
 use OCP\Settings\Events\DeclarativeSettingsSetValueEvent;
 
-/** @template-implements IEventListener<DeclarativeSettingsRegisterFormEvent> */
+/** @template-implements IEventListener<DeclarativeSettingsGetValueEvent|DeclarativeSettingsRegisterFormEvent|DeclarativeSettingsSetValueEvent> */
 class MailSettingsEventListener implements IEventListener {
 
 	public function __construct(

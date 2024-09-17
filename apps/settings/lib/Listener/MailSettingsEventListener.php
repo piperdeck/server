@@ -33,6 +33,7 @@ class MailSettingsEventListener implements IEventListener {
 			return;
 		}
 
+		/** @var DeclarativeSettingsGetValueEvent|DeclarativeSettingsSetValueEvent $event */
 		if ($event->getApp() !== Application::APP_ID) {
 			return;
 		}
@@ -49,7 +50,7 @@ class MailSettingsEventListener implements IEventListener {
 		
 	}
 
-	private function handleRegister(Event $event) {
+	private function handleRegister(DeclarativeSettingsRegisterFormEvent $event): void {
 
 		$event->registerSchema(Application::APP_ID, [
 			'id' => 'mail-provider-support',
@@ -82,7 +83,8 @@ class MailSettingsEventListener implements IEventListener {
 
 	}
 
-	private function handleGetValue(Event $event) {
+
+	private function handleGetValue(DeclarativeSettingsGetValueEvent $event): void {
 		
 		$event->setValue(
 			match($event->getFieldId()) {
@@ -92,7 +94,7 @@ class MailSettingsEventListener implements IEventListener {
 
 	}
 
-	private function handleSetValue(Event $event) {
+	private function handleSetValue(DeclarativeSettingsSetValueEvent $event): void {
 
 		switch ($event->getFieldId()) {
 			case 'mail_providers_disabled':

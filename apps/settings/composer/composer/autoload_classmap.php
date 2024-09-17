@@ -40,6 +40,7 @@ return array(
     'OCA\\Settings\\Hooks' => $baseDir . '/../lib/Hooks.php',
     'OCA\\Settings\\Listener\\AppPasswordCreatedActivityListener' => $baseDir . '/../lib/Listener/AppPasswordCreatedActivityListener.php',
     'OCA\\Settings\\Listener\\GroupRemovedListener' => $baseDir . '/../lib/Listener/GroupRemovedListener.php',
+    'OCA\\Settings\\Listener\\MailSettingsEventListener' => $baseDir . '/../lib/Listener/MailSettingsEventListener.php',
     'OCA\\Settings\\Listener\\UserAddedToGroupActivityListener' => $baseDir . '/../lib/Listener/UserAddedToGroupActivityListener.php',
     'OCA\\Settings\\Listener\\UserRemovedFromGroupActivityListener' => $baseDir . '/../lib/Listener/UserRemovedFromGroupActivityListener.php',
     'OCA\\Settings\\Mailer\\NewUserMailHelper' => $baseDir . '/../lib/Mailer/NewUserMailHelper.php',

@@ -11,7 +11,7 @@ use OCA\DAV\CalDAV\Schedule\IMipPlugin;
 use OCA\DAV\CalDAV\Schedule\IMipService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Defaults;
-use OCP\IConfig;
+use OCP\IAppConfig;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Mail\IAttachment;
@@ -52,7 +52,7 @@ class IMipPluginTest extends TestCase {
 	/** @var ITimeFactory|MockObject */
 	private $timeFactory;
 
-	/** @var IConfig|MockObject */
+	/** @var IAppConfig|MockObject */
 	private $config;
 
 	/** @var IUserSession|MockObject */
@@ -105,7 +105,7 @@ class IMipPluginTest extends TestCase {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->timeFactory->method('getTime')->willReturn(1496912528); // 2017-01-01
 
-		$this->config = $this->createMock(IConfig::class);
+		$this->config = $this->createMock(IAppConfig::class);
 
 		$this->user = $this->createMock(IUser::class);
 
@@ -243,7 +243,7 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		$this->service->expects(self::once())
@@ -341,7 +341,7 @@ class IMipPluginTest extends TestCase {
 		$this->service->expects(self::never())
 			->method('getAttendeeRsvpOrReqForParticipant');
 		$this->config->expects(self::never())
-			->method('getAppValue');
+			->method('getValueString');
 		$this->service->expects(self::never())
 			->method('createInvitationToken');
 		$this->service->expects(self::never())
@@ -447,7 +447,7 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		$this->service->expects(self::once())
@@ -578,7 +578,7 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		$this->service->expects(self::once())
@@ -633,7 +633,7 @@ class IMipPluginTest extends TestCase {
 		];
 		// construct system config mock returns
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		// construct user mock returns
@@ -791,12 +791,12 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		$this->config->expects(self::once())
-			->method('getSystemValueInt')
-			->with('mail_providers_disabled', 0)
+			->method('getValueInt')
+			->with('core','mail_providers_disabled', 0)
 			->willReturn(1);
 		$this->service->expects(self::once())
 			->method('createInvitationToken')
@@ -886,7 +886,7 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('yes');
 		$this->service->expects(self::once())
@@ -979,7 +979,7 @@ class IMipPluginTest extends TestCase {
 			->method('getAttendeeRsvpOrReqForParticipant')
 			->willReturn(true);
 		$this->config->expects(self::once())
-			->method('getAppValue')
+			->method('getValueString')
 			->with('dav', 'invitation_link_recipients', 'yes')
 			->willReturn('no');
 		$this->service->expects(self::never())

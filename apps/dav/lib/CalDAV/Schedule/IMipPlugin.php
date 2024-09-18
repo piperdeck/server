@@ -12,7 +12,7 @@ use OCA\DAV\CalDAV\CalendarObject;
 use OCA\DAV\CalDAV\EventComparisonService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Defaults;
-use OCP\IConfig;
+use OCP\IAppConfig;
 use OCP\IUserSession;
 use OCP\Mail\IMailer;
 use OCP\Mail\Provider\Address;
@@ -46,7 +46,7 @@ use Sabre\VObject\Reader;
  */
 class IMipPlugin extends SabreIMipPlugin {
 	private IUserSession $userSession;
-	private IConfig $config;
+	private IAppConfig $config;
 	private IMailer $mailer;
 	private LoggerInterface $logger;
 	private ITimeFactory $timeFactory;
@@ -61,7 +61,7 @@ class IMipPlugin extends SabreIMipPlugin {
 	private EventComparisonService $eventComparisonService;
 	private IMailManager $mailManager;
 
-	public function __construct(IConfig $config,
+	public function __construct(IAppConfig $config,
 		IMailer $mailer,
 		LoggerInterface $logger,
 		ITimeFactory $timeFactory,
@@ -248,7 +248,7 @@ class IMipPlugin extends SabreIMipPlugin {
 			*/
 
 			$recipientDomain = substr(strrchr($recipient, '@'), 1);
-			$invitationLinkRecipients = explode(',', preg_replace('/\s+/', '', strtolower($this->config->getAppValue('dav', 'invitation_link_recipients', 'yes'))));
+			$invitationLinkRecipients = explode(',', preg_replace('/\s+/', '', strtolower($this->config->getValueString('dav', 'invitation_link_recipients', 'yes'))));
 
 			if (strcmp('yes', $invitationLinkRecipients[0]) === 0
 				|| in_array(strtolower($recipient), $invitationLinkRecipients)
@@ -267,7 +267,7 @@ class IMipPlugin extends SabreIMipPlugin {
 		$mailService = null;
 
 		try {
-			if ($this->config->getSystemValueInt('mail_providers_disabled', 0) === 0) {
+			if ($this->config->getValueInt('core','mail_providers_disabled', 0) === 0) {
 				// retrieve user object
 				$user = $this->userSession->getUser();
 				// evaluate if user object exist

@@ -55,7 +55,7 @@ class SystemMailSettingsListener implements IEventListener {
 
 		switch ($event->getFieldId()) {
 			case 'mail_providers_disabled':
-				$this->config->setValueInt('core', 'mail_providers_disabled', (int) $event->getValue());
+				$this->config->setValueInt('core', 'mail_providers_disabled', (int)$event->getValue());
 				$event->stopPropagation();
 				break;
 		}

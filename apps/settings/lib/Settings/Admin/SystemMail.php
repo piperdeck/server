@@ -13,9 +13,10 @@ use OCP\Settings\IDeclarativeSettingsForm;
 
 class SystemMail implements IDeclarativeSettingsForm {
 
-    public function __construct(
-        private IL10N $l
-    ) {}
+	public function __construct(
+		private IL10N $l
+	) {
+	}
 
 	public function getSchema(): array {
 		return [

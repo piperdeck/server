@@ -796,7 +796,7 @@ class IMipPluginTest extends TestCase {
 			->willReturn('yes');
 		$this->config->expects(self::once())
 			->method('getValueInt')
-			->with('core','mail_providers_disabled', 0)
+			->with('core', 'mail_providers_disabled', 0)
 			->willReturn(1);
 		$this->service->expects(self::once())
 			->method('createInvitationToken')

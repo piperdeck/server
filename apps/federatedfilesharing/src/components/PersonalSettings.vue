@@ -2,6 +2,7 @@
  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
 <template>
 	<NcSettingsSection :name="t('federatedfilesharing', 'Federated Cloud')"
 		:description="t('federatedfilesharing', 'You can share with anyone who uses a Nextcloud server or other Open Cloud Mesh (OCM) compatible servers and services! Just put their Federated Cloud ID in the share dialog. It looks like person@cloud.example.com')"
@@ -47,7 +48,7 @@
 			<NcButton class="social-button__website-button"
 				@click="showHtml = !showHtml">
 				<template #icon>
-					<Web :size="20" />
+					<IconWeb :size="20" />
 				</template>
 				{{ t('federatedfilesharing', 'Add to your website') }}
 			</NcButton>
@@ -87,6 +88,7 @@ export default {
 	name: 'PersonalSettings',
 	components: {
 		NcButton,
+		NcInputField,
 		NcSettingsSection,
 		Twitter,
 		Facebook,
@@ -171,14 +173,11 @@ export default {
 			width: min(100%, 400px) !important;
 		}
 	}
-	.cloud-id-text {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		button {
-			display: inline-flex;
-		}
+
+	.federated-cloud__cloud-id {
+		max-width: 300px;
 	}
+
 	pre {
 		margin-top: 0;
 		white-space: pre-wrap;

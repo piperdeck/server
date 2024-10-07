@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 namespace OCA\Settings\Settings\Admin;
@@ -14,14 +14,14 @@ use OCP\Settings\IDeclarativeSettingsForm;
 class SystemMail implements IDeclarativeSettingsForm {
 
 	public function __construct(
-		private IL10N $l
+		private IL10N $l,
 	) {
 	}
 
 	public function getSchema(): array {
 		return [
 			'id' => 'mail-provider-support',
-			'priority' => 11,
+			'priority' => 10,
 			'section_type' => DeclarativeSettingsTypes::SECTION_TYPE_ADMIN,
 			'section_id' => 'server',
 			'storage_type' => DeclarativeSettingsTypes::STORAGE_TYPE_EXTERNAL,

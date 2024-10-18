@@ -12,7 +12,10 @@ namespace OCA\Files_External\Lib\Storage;
 use GuzzleHttp\Psr7\Uri;
 use Icewind\Streams\CallbackWrapper;
 use Icewind\Streams\IteratorDirectory;
+use OC\Files\Filesystem;
 use OC\Files\ObjectStore\SwiftFactory;
+use OC\Files\Storage\Common;
+use OCP\Cache\CappedMemoryCache;
 use OCP\Files\IMimeTypeDetector;
 use OCP\Files\StorageBadConfigException;
 use OpenStack\Common\Error\BadResponseError;
@@ -20,7 +23,7 @@ use OpenStack\ObjectStore\v1\Models\Container;
 use OpenStack\ObjectStore\v1\Models\StorageObject;
 use Psr\Log\LoggerInterface;
 
-class Swift extends \OC\Files\Storage\Common {
+class Swift extends Common {
 	/** @var SwiftFactory */
 	private $connectionFactory;
 	/**
@@ -71,19 +74,11 @@ class Swift extends \OC\Files\Storage\Common {
 	public const SUBCONTAINER_FILE = '.subcontainers';
 
 	/**
-	 * translate directory path to container name
-	 *
-	 * @param string $path
-	 * @return string
-	 */
-
-	/**
 	 * Fetches an object from the API.
 	 * If the object is cached already or a
 	 * failed "doesn't exist" response was cached,
 	 * that one will be returned.
 	 *
-	 * @param string $path
 	 * @return StorageObject|false object
 	 *                             or false if the object did not exist
 	 * @throws \OCP\Files\StorageAuthException
@@ -116,13 +111,11 @@ class Swift extends \OC\Files\Storage\Common {
 	/**
 	 * Returns whether the given path exists.
 	 *
-	 * @param string $path
-	 *
 	 * @return bool true if the object exist, false otherwise
 	 * @throws \OCP\Files\StorageAuthException
 	 * @throws \OCP\Files\StorageNotAvailableException
 	 */
-	private function doesObjectExist($path): bool {
+	private function doesObjectExist(string $path): bool {
 		return $this->fetchObject($path) !== false;
 	}
 
@@ -165,7 +158,7 @@ class Swift extends \OC\Files\Storage\Common {
 
 		$this->params = $params;
 		// FIXME: private class...
-		$this->objectCache = new \OCP\Cache\CappedMemoryCache();
+		$this->objectCache = new CappedMemoryCache();
 		$this->connectionFactory = new SwiftFactory(
 			\OC::$server->getMemCacheFactory()->createDistributed('swift/'),
 			$this->params,
@@ -176,7 +169,7 @@ class Swift extends \OC\Files\Storage\Common {
 		$this->mimeDetector = \OC::$server->get(IMimeTypeDetector::class);
 	}
 
-	public function mkdir($path): bool {
+	public function mkdir(string $path): bool {
 		$path = $this->normalizePath($path);
 
 		if ($this->is_dir($path)) {
@@ -207,7 +200,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return true;
 	}
 
-	public function file_exists($path): bool {
+	public function file_exists(string $path): bool {
 		$path = $this->normalizePath($path);
 
 		if ($path !== '.' && $this->is_dir($path)) {
@@ -217,7 +210,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return $this->doesObjectExist($path);
 	}
 
-	public function rmdir($path): bool {
+	public function rmdir(string $path): bool {
 		$path = $this->normalizePath($path);
 
 		if (!$this->is_dir($path) || !$this->isDeletable($path)) {
@@ -226,7 +219,7 @@ class Swift extends \OC\Files\Storage\Common {
 
 		$dh = $this->opendir($path);
 		while (($file = readdir($dh)) !== false) {
-			if (\OC\Files\Filesystem::isIgnoredDir($file)) {
+			if (Filesystem::isIgnoredDir($file)) {
 				continue;
 			}
 
@@ -251,7 +244,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return true;
 	}
 
-	public function opendir($path) {
+	public function opendir(string $path) {
 		$path = $this->normalizePath($path);
 
 		if ($path === '.') {
@@ -287,7 +280,7 @@ class Swift extends \OC\Files\Storage\Common {
 		}
 	}
 
-	public function stat($path): array|false {
+	public function stat(string $path): array|false {
 		$path = $this->normalizePath($path);
 
 		if ($path === '.') {
@@ -327,7 +320,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return $stat;
 	}
 
-	public function filetype($path) {
+	public function filetype(string $path) {
 		$path = $this->normalizePath($path);
 
 		if ($path !== '.' && $this->doesObjectExist($path)) {
@@ -343,7 +336,7 @@ class Swift extends \OC\Files\Storage\Common {
 		}
 	}
 
-	public function unlink($path): bool {
+	public function unlink(string $path): bool {
 		$path = $this->normalizePath($path);
 
 		if ($this->is_dir($path)) {
@@ -367,7 +360,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return true;
 	}
 
-	public function fopen($path, $mode) {
+	public function fopen(string $path, string $mode) {
 		$path = $this->normalizePath($path);
 
 		switch ($mode) {
@@ -417,7 +410,7 @@ class Swift extends \OC\Files\Storage\Common {
 		}
 	}
 
-	public function touch($path, $mtime = null): bool {
+	public function touch(string $path, ?int $mtime = null): bool {
 		$path = $this->normalizePath($path);
 		if (is_null($mtime)) {
 			$mtime = time();
@@ -447,7 +440,7 @@ class Swift extends \OC\Files\Storage\Common {
 		}
 	}
 
-	public function copy($source, $target): bool {
+	public function copy(string $source, string $target): bool {
 		$source = $this->normalizePath($source);
 		$target = $this->normalizePath($target);
 
@@ -492,7 +485,7 @@ class Swift extends \OC\Files\Storage\Common {
 
 			$dh = $this->opendir($source);
 			while (($file = readdir($dh)) !== false) {
-				if (\OC\Files\Filesystem::isIgnoredDir($file)) {
+				if (Filesystem::isIgnoredDir($file)) {
 					continue;
 				}
 
@@ -508,7 +501,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return true;
 	}
 
-	public function rename($source, $target): bool {
+	public function rename(string $source, string $target): bool {
 		$source = $this->normalizePath($source);
 		$target = $this->normalizePath($target);
 
@@ -555,7 +548,7 @@ class Swift extends \OC\Files\Storage\Common {
 		return $this->container;
 	}
 
-	public function writeBack($tmpFile, $path): void {
+	public function writeBack(string $tmpFile, string $path): void {
 		$fileData = fopen($tmpFile, 'r');
 		$this->objectStore->writeObject($path, $fileData, $this->mimeDetector->detectPath($path));
 		// invalidate target object to force repopulation on fetch
@@ -563,7 +556,7 @@ class Swift extends \OC\Files\Storage\Common {
 		unlink($tmpFile);
 	}
 
-	public function hasUpdated($path, $time): bool {
+	public function hasUpdated(string $path, int $time): bool {
 		if ($this->is_file($path)) {
 			return parent::hasUpdated($path, $time);
 		}

@@ -1,6 +1,6 @@
 { "translations": {
     "Unknown address" : "عنوان غير معروف",
-    "No result." : "لا يوجد نتيجة",
+    "No result." : "لا توجد أية نتيجة",
     "Malformed JSON data." : "بيانات JSON غير مكونة بشكل صحيح",
     "Error" : "خطأ",
     "Weather status" : "حالة الطقس",
@@ -45,7 +45,7 @@
     "{temperature} {unit} heavy rainfall showers" : "{temperature} {unit} هُطولُ أمطارٍ غزيرةٍ  ",
     "More weather for {adr}" : "المزيد عن الطقس في {adr}",
     "Loading weather" : "تحميل الطقس",
-    "Set location for weather" : "عيّن المكان لمعرفة الطقس",
+    "Set location for weather" : "تعيين المكان لمعرفة الطقس",
     "Remove from favorites" : "إزالة من المُفضّلة",
     "Add as favorite" : "إضافة إلى المُفضّلة",
     "You are not logged in." : "أنت لست داخلاً بعدُ",

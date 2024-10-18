@@ -37,11 +37,13 @@ use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
+use OCP\IGroup;
 use OCP\IL10N;
 use OCP\INavigationManager;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 #[OpenAPI(scope: OpenAPI::SCOPE_IGNORE)]
@@ -93,8 +95,8 @@ class AppSettingsController extends Controller {
 		$templateResponse = new TemplateResponse('settings', 'settings/empty', ['pageTitle' => $this->l10n->t('Settings')]);
 		$templateResponse->setContentSecurityPolicy($policy);
 
-		\OCP\Util::addStyle('settings', 'settings');
-		\OCP\Util::addScript('settings', 'vue-settings-apps-users-management');
+		Util::addStyle('settings', 'settings');
+		Util::addScript('settings', 'vue-settings-apps-users-management');
 
 		return $templateResponse;
 	}
@@ -417,7 +419,7 @@ class AppSettingsController extends Controller {
 				'summary' => $app['translations'][$currentLanguage]['summary'] ?? $app['translations']['en']['summary'],
 				'license' => $app['releases'][0]['licenses'],
 				'author' => $authors,
-				'shipped' => false,
+				'shipped' => $this->appManager->isShipped($app['id']),
 				'version' => $currentVersion,
 				'default_enable' => '',
 				'types' => [],
@@ -512,7 +514,7 @@ class AppSettingsController extends Controller {
 		$groupsList = [];
 		foreach ($groups as $group) {
 			$groupItem = $groupManager->get($group);
-			if ($groupItem instanceof \OCP\IGroup) {
+			if ($groupItem instanceof IGroup) {
 				$groupsList[] = $groupManager->get($group);
 			}
 		}

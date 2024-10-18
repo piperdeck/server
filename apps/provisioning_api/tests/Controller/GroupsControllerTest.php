@@ -8,10 +8,11 @@
 namespace OCA\Provisioning_API\Tests\Controller;
 
 use OC\Group\Manager;
-use OC\SubAdmin;
 use OC\User\NoUserException;
 use OCA\Provisioning_API\Controller\GroupsController;
 use OCP\Accounts\IAccountManager;
+use OCP\AppFramework\OCS\OCSException;
+use OCP\Group\ISubAdmin;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
@@ -34,12 +35,12 @@ class GroupsControllerTest extends \Test\TestCase {
 	protected $userSession;
 	/** @var IAccountManager|\PHPUnit\Framework\MockObject\MockObject */
 	protected $accountManager;
+	/** @var ISubAdmin|\PHPUnit\Framework\MockObject\MockObject */
+	protected $subAdminManager;
 	/** @var IFactory|\PHPUnit\Framework\MockObject\MockObject */
 	protected $l10nFactory;
 	/** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
 	protected $logger;
-	/** @var SubAdmin|\PHPUnit\Framework\MockObject\MockObject */
-	protected $subAdminManager;
 
 	/** @var GroupsController|\PHPUnit\Framework\MockObject\MockObject */
 	protected $api;
@@ -54,10 +55,9 @@ class GroupsControllerTest extends \Test\TestCase {
 		$this->groupManager = $this->createMock(Manager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->accountManager = $this->createMock(IAccountManager::class);
+		$this->subAdminManager = $this->createMock(ISubAdmin::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
-
-		$this->subAdminManager = $this->createMock(SubAdmin::class);
 
 		$this->groupManager
 			->method('getSubAdmin')
@@ -72,6 +72,7 @@ class GroupsControllerTest extends \Test\TestCase {
 				$this->groupManager,
 				$this->userSession,
 				$this->accountManager,
+				$this->subAdminManager,
 				$this->l10nFactory,
 				$this->logger
 			])
@@ -255,7 +256,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testGetGroupAsIrrelevantSubadmin(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionCode(403);
 
 		$group = $this->createGroup('group');
@@ -300,7 +301,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testGetGroupNonExisting(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionMessage('The requested group could not be found');
 		$this->expectExceptionCode(404);
 
@@ -311,7 +312,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testGetSubAdminsOfGroupsNotExists(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionMessage('Group does not exist');
 		$this->expectExceptionCode(101);
 
@@ -358,7 +359,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testAddGroupEmptyGroup(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionMessage('Invalid group name');
 		$this->expectExceptionCode(101);
 
@@ -367,7 +368,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testAddGroupExistingGroup(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionCode(102);
 
 		$this->groupManager
@@ -412,7 +413,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testDeleteGroupNonExisting(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionCode(101);
 
 		$this->api->deleteGroup('NonExistingGroup');
@@ -420,7 +421,7 @@ class GroupsControllerTest extends \Test\TestCase {
 
 
 	public function testDeleteAdminGroup(): void {
-		$this->expectException(\OCP\AppFramework\OCS\OCSException::class);
+		$this->expectException(OCSException::class);
 		$this->expectExceptionCode(102);
 
 		$this->groupManager

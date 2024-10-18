@@ -10,6 +10,7 @@ use Icewind\Streams\CountWrapper;
 use Icewind\Streams\IteratorDirectory;
 use Icewind\Streams\RetryWrapper;
 use OC\Files\Storage\Common;
+use OC\Files\View;
 use OCP\Constants;
 use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeDetector;
@@ -39,7 +40,7 @@ class SFTP extends Common {
 	 * @param string $host protocol://server:port
 	 * @return array [$server, $port]
 	 */
-	private function splitHost($host): array {
+	private function splitHost(string $host): array {
 		$input = $host;
 		if (!str_contains($host, '://')) {
 			// add a protocol to fix parse_url behavior with ipv6
@@ -163,10 +164,7 @@ class SFTP extends Common {
 		return $this->user;
 	}
 
-	/**
-	 * @param string $path
-	 */
-	private function absPath($path): string {
+	private function absPath(string $path): string {
 		return $this->root . $this->cleanPath($path);
 	}
 
@@ -177,7 +175,7 @@ class SFTP extends Common {
 				return false;
 			}
 
-			$view = new \OC\Files\View('/' . $userId . '/files_external');
+			$view = new View('/' . $userId . '/files_external');
 
 			return $view->getLocalFile('ssh_hostKeys');
 		} catch (\Exception $e) {
@@ -185,7 +183,7 @@ class SFTP extends Common {
 		return false;
 	}
 
-	protected function writeHostKeys($keys): bool {
+	protected function writeHostKeys(array $keys): bool {
 		try {
 			$keyPath = $this->hostKeysPath();
 			if ($keyPath && file_exists($keyPath)) {
@@ -224,7 +222,7 @@ class SFTP extends Common {
 		return [];
 	}
 
-	public function mkdir($path): bool {
+	public function mkdir(string $path): bool {
 		try {
 			return $this->getConnection()->mkdir($this->absPath($path));
 		} catch (\Exception $e) {
@@ -232,7 +230,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function rmdir($path): bool {
+	public function rmdir(string $path): bool {
 		try {
 			$result = $this->getConnection()->delete($this->absPath($path), true);
 			// workaround: stray stat cache entry when deleting empty folders
@@ -244,7 +242,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function opendir($path) {
+	public function opendir(string $path) {
 		try {
 			$list = $this->getConnection()->nlist($this->absPath($path));
 			if ($list === false) {
@@ -264,7 +262,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function filetype($path): string|false {
+	public function filetype(string $path): string|false {
 		try {
 			$stat = $this->getConnection()->stat($this->absPath($path));
 			if (!is_array($stat) || !array_key_exists('type', $stat)) {
@@ -282,7 +280,7 @@ class SFTP extends Common {
 		return false;
 	}
 
-	public function file_exists($path): bool {
+	public function file_exists(string $path): bool {
 		try {
 			return $this->getConnection()->stat($this->absPath($path)) !== false;
 		} catch (\Exception $e) {
@@ -290,7 +288,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function unlink($path): bool {
+	public function unlink(string $path): bool {
 		try {
 			return $this->getConnection()->delete($this->absPath($path), true);
 		} catch (\Exception $e) {
@@ -298,7 +296,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function fopen($path, $mode) {
+	public function fopen(string $path, string $mode) {
 		try {
 			$absPath = $this->absPath($path);
 			$connection = $this->getConnection();
@@ -339,7 +337,7 @@ class SFTP extends Common {
 		return false;
 	}
 
-	public function touch($path, $mtime = null): bool {
+	public function touch(string $path, ?int $mtime = null): bool {
 		try {
 			if (!is_null($mtime)) {
 				return false;
@@ -356,15 +354,13 @@ class SFTP extends Common {
 	}
 
 	/**
-	 * @param string $path
-	 * @param string $target
 	 * @throws \Exception
 	 */
-	public function getFile($path, $target): void {
+	public function getFile(string $path, string $target): void {
 		$this->getConnection()->get($path, $target);
 	}
 
-	public function rename($source, $target): bool {
+	public function rename(string $source, string $target): bool {
 		try {
 			if ($this->file_exists($target)) {
 				$this->unlink($target);
@@ -381,7 +377,7 @@ class SFTP extends Common {
 	/**
 	 * @return array{mtime: int, size: int, ctime: int}|false
 	 */
-	public function stat($path): array|false {
+	public function stat(string $path): array|false {
 		try {
 			$stat = $this->getConnection()->stat($this->absPath($path));
 
@@ -398,10 +394,7 @@ class SFTP extends Common {
 		}
 	}
 
-	/**
-	 * @param string $path
-	 */
-	public function constructUrl($path): string {
+	public function constructUrl(string $path): string {
 		// Do not pass the password here. We want to use the Net_SFTP object
 		// supplied via stream context or fail. We only supply username and
 		// hostname because this might show up in logs (they are not used).
@@ -409,7 +402,7 @@ class SFTP extends Common {
 		return $url;
 	}
 
-	public function file_put_contents($path, $data): int|float|false {
+	public function file_put_contents(string $path, mixed $data): int|float|false {
 		/** @psalm-suppress InternalMethod */
 		$result = $this->getConnection()->put($this->absPath($path), $data);
 		if ($result) {
@@ -441,7 +434,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function copy($source, $target): bool {
+	public function copy(string $source, string $target): bool {
 		if ($this->is_dir($source) || $this->is_dir($target)) {
 			return parent::copy($source, $target);
 		} else {
@@ -468,7 +461,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function getPermissions($path): int {
+	public function getPermissions(string $path): int {
 		$stat = $this->getConnection()->stat($this->absPath($path));
 		if (!$stat) {
 			return 0;
@@ -480,7 +473,7 @@ class SFTP extends Common {
 		}
 	}
 
-	public function getMetaData($path): ?array {
+	public function getMetaData(string $path): ?array {
 		$stat = $this->getConnection()->stat($this->absPath($path));
 		if (!$stat) {
 			return null;

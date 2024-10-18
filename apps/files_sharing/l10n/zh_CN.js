@@ -118,8 +118,6 @@ OC.L10N.register(
     "Link copied to clipboard" : "链接已复制到剪贴板",
     "Email already added" : "电子邮箱已添加",
     "Invalid email address" : "无效电子邮箱地址",
-    "_1 email address already added_::_{count} email addresses already added_" : ["{count}个电子邮箱地址已添加"],
-    "_1 email address added_::_{count} email addresses added_" : ["{count}电子邮箱地址已添加"],
     "What are you requesting?" : "你正在请求什么？",
     "Request subject" : "请求主题",
     "Add a note to help people understand what you are requesting." : "添加备注以帮助他人了解你的请求。",
@@ -290,7 +288,6 @@ OC.L10N.register(
     "Error updating the share" : "更新共享时出错",
     "File \"{path}\" has been unshared" : "文件“{path}”已取消共享",
     "Folder \"{path}\" has been unshared" : "文件夹“{path}”已取消共享",
-    "Share {propertyName} saved" : "共享 {propertyName} 已保存",
     "Shared by" : "共享人",
     "Shared with" : "共享给",
     "Password created successfully" : "密码已创建成功",
@@ -338,6 +335,7 @@ OC.L10N.register(
     "Circle" : "圈子",
     "Allow download" : "允许下载",
     "No other users with access found" : "找不到其他具有访问权限的用户",
+    "Share {propertyName} saved" : "共享 {propertyName} 已保存",
     "No entries found in this folder" : "在此文件夹中找不到项目",
     "Name" : "名称",
     "Share time" : "共享时间",
@@ -347,6 +345,8 @@ OC.L10N.register(
     "the link expired" : "链接过期",
     "sharing is disabled" : "已禁用共享",
     "For more info, please ask the person who sent this link." : "如需了解更多信息，请联系发给您该链接的人。",
+    "_1 email address already added_::_{count} email addresses already added_" : ["{count}个电子邮箱地址已添加"],
+    "_1 email address added_::_{count} email addresses added_" : ["{count}电子邮箱地址已添加"],
     "Enter your name" : "输入你的名字"
 },
 "nplurals=1; plural=0;");

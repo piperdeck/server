@@ -220,8 +220,8 @@ class User_Proxy extends Proxy implements IUserBackend, UserInterface, IUserLDAP
 	/**
 	 * check if a user exists on LDAP
 	 *
-	 * @param string|\OCA\User_LDAP\User\User $user either the Nextcloud user
-	 *                                              name or an instance of that user
+	 * @param string|User $user either the Nextcloud user
+	 *                          name or an instance of that user
 	 */
 	public function userExistsOnLDAP($user, bool $ignoreCache = false): bool {
 		$id = ($user instanceof User) ? $user->getUsername() : $user;
@@ -295,7 +295,7 @@ class User_Proxy extends Proxy implements IUserBackend, UserInterface, IUserLDAP
 	}
 
 	/**
-	 * checks whether the user is allowed to change his avatar in Nextcloud
+	 * checks whether the user is allowed to change their avatar in Nextcloud
 	 *
 	 * @param string $uid the Nextcloud user name
 	 * @return boolean either the user can or cannot

@@ -7,6 +7,7 @@
  */
 namespace OCA\Encryption\Crypto;
 
+use OCA\Encryption\Exceptions\PrivateKeyMissingException;
 use OCA\Encryption\KeyManager;
 use OCA\Encryption\Session;
 use OCA\Encryption\Util;
@@ -73,7 +74,7 @@ class DecryptAll {
 			$recoveryKeyId = $this->keyManager->getRecoveryKeyId();
 			if (!empty($user)) {
 				$output->writeln('You can only decrypt the users files if you know');
-				$output->writeln('the users password or if he activated the recovery key.');
+				$output->writeln('the users password or if they activated the recovery key.');
 				$output->writeln('');
 				$questionUseLoginPassword = new ConfirmationQuestion(
 					'Do you want to use the users login password to decrypt all files? (y/n) ',
@@ -118,7 +119,7 @@ class DecryptAll {
 	 * @param string $user
 	 * @param string $password
 	 * @return bool|string
-	 * @throws \OCA\Encryption\Exceptions\PrivateKeyMissingException
+	 * @throws PrivateKeyMissingException
 	 */
 	protected function getPrivateKey($user, $password) {
 		$recoveryKeyId = $this->keyManager->getRecoveryKeyId();

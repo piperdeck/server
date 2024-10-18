@@ -35,6 +35,7 @@ use OCP\Share\IAttributes;
 use OCP\Share\IManager as IShareManager;
 use OCP\Share\IShare;
 use OCP\Share\IShareProviderWithNotification;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -382,7 +383,7 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 				]
 			);
 		}
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+		$message->setFrom([Util::getDefaultEmailAddress($instanceName) => $senderName]);
 
 		// The "Reply-To" is set to the sharer if an mail address is configured
 		// also the default footer contains a "Do not reply" which needs to be adjusted.
@@ -478,7 +479,7 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 				]
 			);
 		}
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+		$message->setFrom([Util::getDefaultEmailAddress($instanceName) => $senderName]);
 
 		// The "Reply-To" is set to the sharer if an mail address is configured
 		// also the default footer contains a "Do not reply" which needs to be adjusted.
@@ -548,7 +549,7 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 				]
 			);
 		}
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+		$message->setFrom([Util::getDefaultEmailAddress($instanceName) => $senderName]);
 		if ($this->settingsManager->replyToInitiator() && $initiatorEmailAddress !== null) {
 			$message->setReplyTo([$initiatorEmailAddress => $initiatorDisplayName]);
 			$emailTemplate->addFooter($instanceName . ' - ' . $this->defaults->getSlogan());
@@ -617,7 +618,7 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 				$instanceName
 			]
 		);
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+		$message->setFrom([Util::getDefaultEmailAddress($instanceName) => $senderName]);
 		$message->setTo([$initiatorEMailAddress => $initiatorDisplayName]);
 		$message->useTemplate($emailTemplate);
 		$this->mailer->send($message);
@@ -739,11 +740,14 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 		$shareAttributes = $this->formatShareAttributes($share->getAttributes());
 
 		/*
-		 * We allow updating the permissions and password of mail shares
+		 * We allow updating mail shares
 		 */
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->update('share')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())))
+			->set('item_source', $qb->createNamedParameter($share->getNodeId()))
+			->set('file_source', $qb->createNamedParameter($share->getNodeId()))
+			->set('share_with', $qb->createNamedParameter($share->getSharedWith()))
 			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
 			->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
 			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
@@ -1200,7 +1204,7 @@ class ShareByMailProvider extends DefaultShareProvider implements IShareProvider
 			->from('share')
 			->where(
 				$qb->expr()->orX(
-					$qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share\IShare::TYPE_EMAIL))
+					$qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_EMAIL))
 				)
 			);
 

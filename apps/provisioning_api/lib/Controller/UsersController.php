@@ -31,6 +31,7 @@ use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\ISubAdmin;
 use OCP\HintException;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -46,6 +47,7 @@ use OCP\L10N\IFactory;
 use OCP\Security\Events\GenerateSecurePasswordEvent;
 use OCP\Security\ISecureRandom;
 use OCP\User\Backend\ISetDisplayNameBackend;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,6 +65,7 @@ class UsersController extends AUserData {
 		IGroupManager $groupManager,
 		IUserSession $userSession,
 		IAccountManager $accountManager,
+		ISubAdmin $subAdminManager,
 		IFactory $l10nFactory,
 		private IURLGenerator $urlGenerator,
 		private LoggerInterface $logger,
@@ -81,6 +84,7 @@ class UsersController extends AUserData {
 			$groupManager,
 			$userSession,
 			$accountManager,
+			$subAdminManager,
 			$l10nFactory
 		);
 
@@ -946,7 +950,7 @@ class UsersController extends AUserData {
 			$permittedFields[] = IAccountManager::PROPERTY_PROFILE_ENABLED;
 			$permittedFields[] = IAccountManager::PROPERTY_BIRTHDATE;
 			$permittedFields[] = IAccountManager::PROPERTY_PRONOUNS;
-		
+
 			$permittedFields[] = IAccountManager::PROPERTY_PHONE . self::SCOPE_SUFFIX;
 			$permittedFields[] = IAccountManager::PROPERTY_ADDRESS . self::SCOPE_SUFFIX;
 			$permittedFields[] = IAccountManager::PROPERTY_WEBSITE . self::SCOPE_SUFFIX;
@@ -1029,7 +1033,7 @@ class UsersController extends AUserData {
 					if (is_numeric($quota)) {
 						$quota = (float)$quota;
 					} else {
-						$quota = \OCP\Util::computerFileSize($quota);
+						$quota = Util::computerFileSize($quota);
 					}
 					if ($quota === false) {
 						throw new OCSException($this->l10n->t('Invalid quota value: %1$s', [$value]), 101);
@@ -1041,7 +1045,7 @@ class UsersController extends AUserData {
 						if ($maxQuota !== -1 && $quota > $maxQuota) {
 							throw new OCSException($this->l10n->t('Invalid quota value. %1$s is exceeding the maximum quota', [$value]), 101);
 						}
-						$quota = \OCP\Util::humanFileSize($quota);
+						$quota = Util::humanFileSize($quota);
 					}
 				}
 				// no else block because quota can be set to 'none' in previous if

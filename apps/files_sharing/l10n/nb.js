@@ -140,8 +140,6 @@ OC.L10N.register(
     "Link copied to clipboard" : "Lenke kopiert til utklippstavlen",
     "Email already added" : "E-post allerede lagt til",
     "Invalid email address" : "Ugyldig e-postadresse",
-    "_1 email address already added_::_{count} email addresses already added_" : ["1 e-postadresse allerede lagt til","{count} e-postadresser allerede lagt til"],
-    "_1 email address added_::_{count} email addresses added_" : ["1 e-postadresse lagt til","{count} e-postadresser lagt til"],
     "What are you requesting?" : "Hva ber du om?",
     "Request subject" : "Be om emne",
     "Birthday party photos, History assignment…" : "Bursdagsfestbilder, Historieoppgave...",
@@ -331,7 +329,6 @@ OC.L10N.register(
     "Error updating the share" : "Feil under oppdatering av delingen",
     "File \"{path}\" has been unshared" : "Deling av filen \"{path}\" er opphevd",
     "Folder \"{path}\" has been unshared" : "Deling av mappen \"{path}\" er opphevd",
-    "Share {propertyName} saved" : "Deling {propertyName} er lagret",
     "Shared by" : "Delt av",
     "Shared with" : "Delt med",
     "Password created successfully" : "Passord opprettet",
@@ -380,6 +377,7 @@ OC.L10N.register(
     "Circle" : "Sirkel",
     "Allow download" : "Tillat nedlasting",
     "No other users with access found" : "Ingen andre brukere med tilgang funnet",
+    "Share {propertyName} saved" : "Deling {propertyName} er lagret",
     "No entries found in this folder" : "Ingen oppføringer funnet i denne mappen",
     "Name" : "Navn",
     "Share time" : "Delingstidspunkt",
@@ -389,6 +387,8 @@ OC.L10N.register(
     "the link expired" : "lenken er utløpt",
     "sharing is disabled" : "deling er avskrudd",
     "For more info, please ask the person who sent this link." : "For mer informasjon, spør personen som sendte lenken.",
+    "_1 email address already added_::_{count} email addresses already added_" : ["1 e-postadresse allerede lagt til","{count} e-postadresser allerede lagt til"],
+    "_1 email address added_::_{count} email addresses added_" : ["1 e-postadresse lagt til","{count} e-postadresser lagt til"],
     "Enter your name" : "Skriv inn navnet ditt"
 },
 "nplurals=2; plural=(n != 1);");

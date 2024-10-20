@@ -12,6 +12,8 @@ use OC\AppFramework\Bootstrap\Coordinator;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Calendar\Exceptions\CalendarException;
 use OCP\Calendar\ICalendar;
+use OCP\Calendar\ICalendarIsShared;
+use OCP\Calendar\ICalendarIsWritable;
 use OCP\Calendar\ICalendarProvider;
 use OCP\Calendar\ICalendarQuery;
 use OCP\Calendar\ICreateFromString;
@@ -217,7 +219,7 @@ class Manager implements IManager {
 		
 		$userCalendars = $this->getCalendarsForPrincipal($principalUri);
 		if (empty($userCalendars)) {
-			$this->logger->warning('iMip message could not be processed because user has on calendars');
+			$this->logger->warning('iMip message could not be processed because user has no calendars');
 			return false;
 		}
 		
@@ -230,7 +232,7 @@ class Manager implements IManager {
 		}
 		
 		if (!isset($calendarObject->VEVENT)) {
-			$this->logger->warning('iMip message contains an no event');
+			$this->logger->warning('iMip message contains no event');
 			return false;
 		}
 
@@ -259,6 +261,10 @@ class Manager implements IManager {
 		}
 		
 		foreach ($userCalendars as $calendar) {
+			
+			if (!$calendar instanceof ICalendarIsWritable && !$calendar instanceof ICalendarIsShared) {
+				continue;
+			}
 			
 			if ($calendar->isDeleted() || !$calendar->isWritable() || $calendar->isShared()) {
 				continue;

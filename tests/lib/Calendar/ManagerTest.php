@@ -11,6 +11,8 @@ use OC\Calendar\Manager;
 use OCA\DAV\CalDAV\CalendarImpl;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Calendar\ICalendar;
+use OCP\Calendar\ICalendarIsShared;
+use OCP\Calendar\ICalendarIsWritable;
 use OCP\Calendar\ICreateFromString;
 use OCP\Calendar\IHandleImipMessage;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,23 +26,23 @@ use Test\TestCase;
 /*
  * This allows us to create Mock object supporting both interfaces
  */
-interface ICreateFromStringAndHandleImipMessage extends ICreateFromString, IHandleImipMessage {
+interface ITestCalendar extends ICreateFromString, IHandleImipMessage, ICalendarIsShared, ICalendarIsWritable {
 }
 
 class ManagerTest extends TestCase {
-	/** @var Coordinator|MockObject */
+	/** @var Coordinator&MockObject */
 	private $coordinator;
 
-	/** @var MockObject|ContainerInterface */
+	/** @var ContainerInterface&MockObject */
 	private $container;
 
-	/** @var MockObject|LoggerInterface */
+	/** @var LoggerInterface&MockObject */
 	private $logger;
 
 	/** @var Manager */
 	private $manager;
 
-	/** @var ITimeFactory|ITimeFactory&MockObject|MockObject */
+	/** @var ITimeFactory&MockObject */
 	private $time;
 
 	private VCalendar $vCalendar1a;
@@ -62,6 +64,7 @@ class ManagerTest extends TestCase {
 
 		// construct calendar with a 1 hour event and same start/end time zones
 		$this->vCalendar1a = new VCalendar();
+		/** @var VEvent $vEvent */
 		$vEvent = $this->vCalendar1a->add('VEVENT', []);
 		$vEvent->UID->setValue('96a0e6b1-d886-4a55-a60d-152b31401dcc');
 		$vEvent->add('DTSTART', '20240701T080000', ['TZID' => 'America/Toronto']);
@@ -260,13 +263,14 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
+		$manager->expects(self::once())
+			->method('getCalendarsForPrincipal')
+			->willReturn([]);
 		// construct logger returns
 		$this->logger->expects(self::once())->method('warning')
-			->with('iMip message could not be processed because user has on calendars');
+			->with('iMip message could not be processed because user has no calendars');
 		// construct parameters
 		$principalUri = 'principals/user/attendee1';
 		$sender = 'organizer@testing.com';
@@ -280,8 +284,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithNoMethod(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -289,9 +294,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -311,8 +314,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithInvalidMethod(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -320,9 +324,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -343,8 +345,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithNoEvent(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -352,16 +355,14 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
 			->willReturn([$userCalendar]);
 		// construct logger returns
 		$this->logger->expects(self::once())->method('warning')
-			->with('iMip message contains an no event');
+			->with('iMip message contains no event');
 		// construct parameters
 		$principalUri = 'principals/user/attendee1';
 		$sender = 'organizer@testing.com';
@@ -376,8 +377,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithNoUid(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -385,9 +387,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -409,8 +409,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithNoAttendee(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -418,9 +419,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -442,8 +441,9 @@ class ManagerTest extends TestCase {
 
 	public function testHandleImipRequestWithInvalidAttendee(): void {
 		// construct mock user calendar
-		$userCalendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$userCalendar = $this->createMock(ITestCalendar::class);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -451,9 +451,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -488,6 +486,7 @@ class ManagerTest extends TestCase {
 			->method('search')
 			->willReturn([]);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -495,9 +494,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -532,6 +529,7 @@ class ManagerTest extends TestCase {
 			->method('search')
 			->willReturn([['uri' => 'principals/user/attendee1/personal']]);
 		// construct mock calendar manager and returns
+		/** @var Manager&MockObject $manager */
 		$manager = $this->getMockBuilder(Manager::class)
 			->setConstructorArgs([
 				$this->coordinator,
@@ -539,9 +537,7 @@ class ManagerTest extends TestCase {
 				$this->logger,
 				$this->time
 			])
-			->setMethods([
-				'getCalendarsForPrincipal'
-			])
+			->onlyMethods(['getCalendarsForPrincipal'])
 			->getMock();
 		$manager->expects(self::once())
 			->method('getCalendarsForPrincipal')
@@ -654,7 +650,7 @@ class ManagerTest extends TestCase {
 				'getCalendarsForPrincipal'
 			])
 			->getMock();
-		$calendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$calendar = $this->createMock(ITestCalendar::class);
 		$principalUri = 'principals/user/linus';
 		$sender = 'pierre@general-store.com';
 		$recipient = 'linus@stardew-tent-living.com';
@@ -691,7 +687,7 @@ class ManagerTest extends TestCase {
 				'getCalendarsForPrincipal'
 			])
 			->getMock();
-		$calendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$calendar = $this->createMock(ITestCalendar::class);
 		$principalUri = 'principals/user/linus';
 		$sender = 'pierre@general-store.com';
 		$recipient = 'linus@stardew-tent-living.com';
@@ -815,7 +811,7 @@ class ManagerTest extends TestCase {
 		$sender = 'clint@stardew-blacksmiths.com';
 		$recipient = 'pierre@general-store.com';
 		$replyTo = 'linus@stardew-tent-living.com';
-		$calendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$calendar = $this->createMock(ITestCalendar::class);
 		$calendarData = $this->getVCalendarCancel();
 
 		$this->time->expects(self::once())
@@ -852,7 +848,7 @@ class ManagerTest extends TestCase {
 		$sender = 'linus@stardew-tent-living.com';
 		$recipient = 'pierre@general-store.com';
 		$replyTo = null;
-		$calendar = $this->createMock(ICreateFromStringAndHandleImipMessage::class);
+		$calendar = $this->createMock(ITestCalendar::class);
 		$calendarData = $this->getVCalendarCancel();
 
 		$this->time->expects(self::once())

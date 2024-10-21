@@ -43,21 +43,17 @@ class SystemMailSettingsListener implements IEventListener {
 
 	private function handleGetValue(DeclarativeSettingsGetValueEvent $event): void {
 		
-		$event->setValue(
-			match($event->getFieldId()) {
-				'mail_providers_disabled' => $this->config->getValueInt('core', 'mail_providers_disabled', 0),
-			}
-		);
+		if ($event->getFieldId() === 'mail_providers_enabled') {
+			$event->setValue((int)$this->config->getValueBool('core', 'mail_providers_enabled', true));
+		}
 
 	}
 
 	private function handleSetValue(DeclarativeSettingsSetValueEvent $event): void {
 
-		switch ($event->getFieldId()) {
-			case 'mail_providers_disabled':
-				$this->config->setValueInt('core', 'mail_providers_disabled', (int)$event->getValue());
-				$event->stopPropagation();
-				break;
+		if ($event->getFieldId() === 'mail_providers_enabled') {
+			$this->config->setValueBool('core', 'mail_providers_enabled', (bool)$event->getValue());
+			$event->stopPropagation();
 		}
 
 	}

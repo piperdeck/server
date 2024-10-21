@@ -30,18 +30,18 @@ class SystemMail implements IDeclarativeSettingsForm {
 
 			'fields' => [
 				[
-					'id' => 'mail_providers_disabled',
+					'id' => 'mail_providers_enabled',
 					'title' => $this->l->t('Send system e-mails using'),
 					'type' => DeclarativeSettingsTypes::RADIO,
-					'default' => 0,
+					'default' => 1,
 					'options' => [
 						[
 							'name' => $this->l->t('People\'s e-mail account'),
-							'value' => 0
+							'value' => 1
 						],
 						[
 							'name' => $this->l->t('System e-mail account'),
-							'value' => 1
+							'value' => 0
 						],
 					],
 				],

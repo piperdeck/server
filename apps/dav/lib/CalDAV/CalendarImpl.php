@@ -239,8 +239,7 @@ class CalendarImpl implements ICreateFromString, IHandleImipMessage, ICalendarIs
 		if ($iTipMessage->method === 'REQUEST') {
 			$iTipMessage->sender = $organizer;
 			$iTipMessage->recipient = $attendee;
-		}
-		elseif ($iTipMessage->method === 'REPLY') {
+		} elseif ($iTipMessage->method === 'REPLY') {
 			if ($server->isExternalAttendee($vEvent->{'ATTENDEE'}->getValue())) {
 				$iTipMessage->recipient = $organizer;
 			} else {

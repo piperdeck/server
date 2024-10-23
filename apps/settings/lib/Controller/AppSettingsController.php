@@ -581,7 +581,11 @@ class AppSettingsController extends Controller {
 		$appId = $this->appManager->cleanAppId($appId);
 		$result = $this->installer->removeApp($appId);
 		if ($result !== false) {
-			$this->appManager->clearAppsCache();
+			/** @var \OC\App\AppManager $appManager */
+			$appManager = $this->appManager;
+			// If this app was force enabled, remove the force-enabled-state
+			$appManager->removeOverwriteNextcloudRequirement($appId);
+			$appManager->clearAppsCache();
 			return new JSONResponse(['data' => ['appid' => $appId]]);
 		}
 		return new JSONResponse(['data' => ['message' => $this->l10n->t('Could not remove app.')]], Http::STATUS_INTERNAL_SERVER_ERROR);
@@ -619,8 +623,11 @@ class AppSettingsController extends Controller {
 	}
 
 	public function force(string $appId): JSONResponse {
-		$appId = $this->appManager->cleanAppId($appId);
-		$this->appManager->ignoreNextcloudRequirementForApp($appId);
+		/** @var \OC\App\AppManager $appManager */
+		$appManager = $this->appManager;
+
+		$appId = $appManager->cleanAppId($appId);
+		$appManager->overwriteNextcloudRequirement($appId);
 		return new JSONResponse();
 	}
 }

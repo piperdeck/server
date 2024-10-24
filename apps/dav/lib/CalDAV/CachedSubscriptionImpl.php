@@ -20,13 +20,11 @@ class CachedSubscriptionImpl implements ICalendar, ICalendarIsShared, ICalendarI
 	private array $calendarInfo;
 
 	public function __construct(
-		CachedSubscription $calendar,
-		array $calendarInfo,
-		CalDavBackend $backend,
+		private CachedSubscription $calendar,
+		/** @var array<string, mixed> */
+		private array $calendarInfo,
+		private CalDavBackend $backend,
 	) {
-		$this->calendar = $calendar;
-		$this->calendarInfo = $calendarInfo;
-		$this->backend = $backend;
 	}
 
 	/**

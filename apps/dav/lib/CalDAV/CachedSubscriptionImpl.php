@@ -14,10 +14,6 @@ use OCP\Calendar\ICalendarIsWritable;
 use OCP\Constants;
 
 class CachedSubscriptionImpl implements ICalendar, ICalendarIsShared, ICalendarIsWritable {
-	private CalDavBackend $backend;
-	private CachedSubscription $calendar;
-	/** @var array<string, mixed> */
-	private array $calendarInfo;
 
 	public function __construct(
 		private CachedSubscription $calendar,

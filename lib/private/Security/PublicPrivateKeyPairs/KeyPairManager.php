@@ -21,7 +21,7 @@ use OCP\Security\PublicPrivateKeyPairs\Model\IKeyPair;
  * KeyPairManager store internal public/private key pair using AppConfig, taking advantage of the encryption
  * and lazy loading.
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 class KeyPairManager implements IKeyPairManager {
 	private const CONFIG_PREFIX = 'security.keypair.';
@@ -40,7 +40,7 @@ class KeyPairManager implements IKeyPairManager {
 	 *
 	 * @return IKeyPair
 	 * @throws KeyPairConflictException if a key already exist
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function generateKeyPair(string $app, string $name, array $options = []): IKeyPair {
 		if ($this->hasKeyPair($app, $name)) {
@@ -51,16 +51,16 @@ class KeyPairManager implements IKeyPairManager {
 
 		[$publicKey, $privateKey] = $this->generateKeys($options);
 		$keyPair->setPublicKey($publicKey)
-				->setPrivateKey($privateKey)
-				->setOptions($options);
+			->setPrivateKey($privateKey)
+			->setOptions($options);
 
 		$this->appConfig->setValueArray(
-					   $app, $this->generateAppConfigKey($name),
-					   [
-						   'public' => $keyPair->getPublicKey(),
-						   'private' => $keyPair->getPrivateKey(),
-						   'options' => $keyPair->getOptions()
-					   ],
+			$app, $this->generateAppConfigKey($name),
+			[
+				'public' => $keyPair->getPublicKey(),
+				'private' => $keyPair->getPrivateKey(),
+				'options' => $keyPair->getOptions()
+			],
 			lazy:      true,
 			sensitive: true
 		);
@@ -75,7 +75,7 @@ class KeyPairManager implements IKeyPairManager {
 	 * @param string $name key name
 	 *
 	 * @return bool TRUE if key pair exists in database
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function hasKeyPair(string $app, string $name): bool {
 		$key = $this->generateAppConfigKey($name);
@@ -90,7 +90,7 @@ class KeyPairManager implements IKeyPairManager {
 	 *
 	 * @return IKeyPair
 	 * @throws KeyPairNotFoundException if key pair is not known
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getKeyPair(string $app, string $name): IKeyPair {
 		if (!$this->hasKeyPair($app, $name)) {
@@ -106,8 +106,8 @@ class KeyPairManager implements IKeyPairManager {
 
 		$keyPair = new KeyPair($app, $name);
 		return $keyPair->setPublicKey($stored['public'])
-					   ->setPrivateKey($stored['private'])
-					   ->setOptions($stored['options'] ?? []);
+			->setPrivateKey($stored['private'])
+			->setOptions($stored['options'] ?? []);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class KeyPairManager implements IKeyPairManager {
 	 * @param string $app appid
 	 * @param string $name key name
 	 *
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function deleteKeyPair(string $app, string $name): void {
 		$this->appConfig->deleteKey('core', $this->generateAppConfigKey($name));
@@ -128,7 +128,7 @@ class KeyPairManager implements IKeyPairManager {
 	 * @param IKeyPair $keyPair keypair to test
 	 *
 	 * @return bool
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function testKeyPair(IKeyPair $keyPair): bool {
 		$clear = md5((string)time());

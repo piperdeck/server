@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 namespace OCP\Security\Signature\Model;
 
 /**
@@ -10,11 +14,11 @@ namespace OCP\Security\Signature\Model;
  * - SYNCED = the remote instance is trustable.
  * - BROKEN = the remote instance does not use the same key pairs
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 enum SignatoryStatus: int {
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case SYNCED = 1;
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case BROKEN = 9;
 }

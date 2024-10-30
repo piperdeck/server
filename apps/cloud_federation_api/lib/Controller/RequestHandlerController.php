@@ -51,7 +51,7 @@ use Psr\Log\LoggerInterface;
  */
 #[OpenAPI(scope: OpenAPI::SCOPE_FEDERATION)]
 class RequestHandlerController extends Controller {
-	const APPCONFIG_SIGN_ENFORCED = 'enforce_signed_ocm_request';
+	public const APPCONFIG_SIGN_ENFORCED = 'enforce_signed_ocm_request';
 
 	public function __construct(
 		string $appName,
@@ -104,8 +104,7 @@ class RequestHandlerController extends Controller {
 			$this->confirmSignedOrigin($signedRequest, 'owner', $owner);
 		} catch (IncomingRequestException $e) {
 			$this->logger->warning('incoming request exception', ['exception' => $e]);
-			return new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []],
-									Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []], Http::STATUS_BAD_REQUEST);
 		}
 
 		// check if all required parameters are set
@@ -242,8 +241,7 @@ class RequestHandlerController extends Controller {
 			$this->confirmShareOrigin($signedRequest, $notification['sharedSecret'] ?? '');
 		} catch (IncomingRequestException $e) {
 			$this->logger->warning('incoming request exception', ['exception' => $e]);
-			return new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []],
-									Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []], Http::STATUS_BAD_REQUEST);
 		}
 
 		// check if all required parameters are set
@@ -337,7 +335,7 @@ class RequestHandlerController extends Controller {
 	 */
 	private function getSignedRequest(): ?IIncomingSignedRequest {
 		try {
- 			return $this->signatureManager->getIncomingSignedRequest($this->signatoryManager);
+			return $this->signatureManager->getIncomingSignedRequest($this->signatoryManager);
 		} catch (SignatureNotFoundException|SignatoryNotFoundException $e) {
 			// remote does not support signed request.
 			// currently we still accept unsigned request until lazy appconfig

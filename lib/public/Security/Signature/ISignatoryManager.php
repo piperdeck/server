@@ -16,7 +16,7 @@ use OCP\Security\Signature\Model\ISignatory;
  *   - signing outgoing request
  *   - confirm the authenticity of incoming signed request.
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface ISignatoryManager {
 	/**
@@ -26,7 +26,7 @@ interface ISignatoryManager {
 	 * Must be unique.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getProviderId(): string;
 
@@ -41,7 +41,7 @@ interface ISignatoryManager {
 	 * ]
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOptions(): array;
 
@@ -51,7 +51,7 @@ interface ISignatoryManager {
 	 * Used to sign outgoing request
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getLocalSignatory(): ISignatory;
 
@@ -64,7 +64,7 @@ interface ISignatoryManager {
 	 * @param IIncomingSignedRequest $signedRequest
 	 *
 	 * @return ISignatory|null must be NULL if no signatory is found
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getRemoteSignatory(IIncomingSignedRequest $signedRequest): ?ISignatory;
 }

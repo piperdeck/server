@@ -11,14 +11,35 @@ namespace OC\Core\Migrations;
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
+use OCP\Migration\Attributes\AddIndex;
+use OCP\Migration\Attributes\CreateTable;
+use OCP\Migration\Attributes\IndexType;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
-
 /**
- * @since 30.0.0
+ * @since 31.0.0
  */
-class Version30000Date20240101084401 extends SimpleMigrationStep {
+#[CreateTable(
+	table: 'sec_signatory',
+	columns: ['id', 'key_id_sum', 'key_id', 'host', 'provider_id', 'account', 'public_key', 'metadata', 'type', 'status', 'creation', 'last_updated'],
+	description: 'new table to store remove public/private key pairs'
+)]
+#[AddIndex(
+	table: 'sec_signatory',
+	type: IndexType::PRIMARY
+)]
+#[AddIndex(
+	table: 'sec_signatory',
+	type: IndexType::UNIQUE,
+	description: 'confirm uniqueness per host, provider and account'
+)]
+#[AddIndex(
+	table: 'sec_signatory',
+	type: IndexType::INDEX,
+	description: 'to search on key and provider'
+)]
+class Version31000Date20240101084401 extends SimpleMigrationStep {
 	public function description(): string {
 		return "creating new table 'sec_signatory' to store remote signatories";
 	}

@@ -8,20 +8,22 @@ declare(strict_types=1);
  */
 namespace OCP\Security\Signature\Model;
 
+use OCP\Security\Signature\Exceptions\SignatoryNotFoundException;
+
 /**
  * model that store data related to a possible signature.
  * those details will be used:
  * - to confirm authenticity of a signed incoming request
  * - to sign an outgoing request
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface ISignedRequest {
 	/**
 	 * payload of the request
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getBody(): string;
 
@@ -29,7 +31,7 @@ interface ISignedRequest {
 	 * checksum of the payload of the request
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getDigest(): string;
 
@@ -38,7 +40,7 @@ interface ISignedRequest {
 	 *
 	 * @param array $signatureHeader
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignatureHeader(array $signatureHeader): ISignedRequest;
 
@@ -46,7 +48,7 @@ interface ISignedRequest {
 	 * get the list of headers related to the signature of the request
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getSignatureHeader(): array;
 
@@ -55,7 +57,7 @@ interface ISignedRequest {
 	 *
 	 * @param string $signedSignature
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignedSignature(string $signedSignature): ISignedRequest;
 
@@ -63,7 +65,7 @@ interface ISignedRequest {
 	 * get the signed version of the signature
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getSignedSignature(): string;
 
@@ -72,7 +74,7 @@ interface ISignedRequest {
 	 *
 	 * @param ISignatory $signatory
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignatory(ISignatory $signatory): ISignedRequest;
 
@@ -80,7 +82,8 @@ interface ISignedRequest {
 	 * get the signatory, containing keys and details, related to this request
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @throws SignatoryNotFoundException
+	 * @since 31.0.0
 	 */
 	public function getSignatory(): ISignatory;
 
@@ -88,7 +91,7 @@ interface ISignedRequest {
 	 * returns if a signatory related to this request have been found and defined
 	 *
 	 * @return bool
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function hasSignatory(): bool;
 }

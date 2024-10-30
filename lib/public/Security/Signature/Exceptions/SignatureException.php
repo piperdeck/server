@@ -11,7 +11,7 @@ namespace OCP\Security\Signature\Exceptions;
 use Exception;
 
 /**
- * @since 30.0.0
+ * @since 31.0.0
  */
 class SignatureException extends Exception {
 }

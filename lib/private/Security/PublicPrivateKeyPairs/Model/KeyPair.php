@@ -13,7 +13,7 @@ use OCP\Security\PublicPrivateKeyPairs\Model\IKeyPair;
 /**
  * @inheritDoc
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 class KeyPair implements IKeyPair {
 	private string $publicKey = '';
@@ -22,7 +22,7 @@ class KeyPair implements IKeyPair {
 
 	public function __construct(
 		private readonly string $app,
-		private readonly string $name
+		private readonly string $name,
 	) {
 	}
 
@@ -30,7 +30,7 @@ class KeyPair implements IKeyPair {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getApp(): string {
 		return $this->app;
@@ -40,7 +40,7 @@ class KeyPair implements IKeyPair {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getName(): string {
 		return $this->name;
@@ -51,9 +51,9 @@ class KeyPair implements IKeyPair {
 	 *
 	 * @param string $publicKey
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setPublicKey(string $publicKey): self {
+	public function setPublicKey(string $publicKey): IKeyPair {
 		$this->publicKey = $publicKey;
 		return $this;
 	}
@@ -62,7 +62,7 @@ class KeyPair implements IKeyPair {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPublicKey(): string {
 		return $this->publicKey;
@@ -73,9 +73,9 @@ class KeyPair implements IKeyPair {
 	 *
 	 * @param string $privateKey
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setPrivateKey(string $privateKey): self {
+	public function setPrivateKey(string $privateKey): IKeyPair {
 		$this->privateKey = $privateKey;
 		return $this;
 	}
@@ -84,7 +84,7 @@ class KeyPair implements IKeyPair {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPrivateKey(): string {
 		return $this->privateKey;
@@ -95,9 +95,9 @@ class KeyPair implements IKeyPair {
 	 *
 	 * @param array $options
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setOptions(array $options): self {
+	public function setOptions(array $options): IKeyPair {
 		$this->options = $options;
 		return $this;
 	}
@@ -106,7 +106,7 @@ class KeyPair implements IKeyPair {
 	 * @inheritDoc
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOptions(): array {
 		return $this->options;

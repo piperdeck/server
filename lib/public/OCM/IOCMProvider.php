@@ -125,9 +125,9 @@ interface IOCMProvider extends JsonSerializable {
 	 * store signatory (public/private key pair) to sign outgoing/incoming request
 	 *
 	 * @param ISignatory $signatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setSignatory(ISignatory $signatory);
+	public function setSignatory(ISignatory $signatory): void;
 
 	/**
 	 * signatory (public/private key pair) used to sign outgoing/incoming request
@@ -150,13 +150,15 @@ interface IOCMProvider extends JsonSerializable {
 	/**
 	 * @return array{
 	 *     enabled: bool,
-	 *     apiVersion: string,
+	 *     apiVersion: '1.0-proposal1',
 	 *     endPoint: string,
+	 *     publicKey: ISignatory|null,
 	 *     resourceTypes: array{
 	 *         name: string,
 	 *         shareTypes: string[],
 	 *         protocols: array<string, string>
-	 *     }[]
+	 *     }[],
+	 *     version: string
 	 * }
 	 * @since 28.0.0
 	 */

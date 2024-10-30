@@ -16,7 +16,7 @@ use OCP\Security\Signature\ISignatureManager;
  * authenticity of the origin of the request.
  *
  * @see ISignatureManager for details on signature
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface IIncomingSignedRequest extends ISignedRequest {
 	/**
@@ -24,7 +24,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 *
 	 * @param IRequest $request
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setRequest(IRequest $request): IIncomingSignedRequest;
 
@@ -32,7 +32,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 * returns the base IRequest
 	 *
 	 * @return IRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getRequest(): IRequest;
 
@@ -41,7 +41,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 *
 	 * @param int $time
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setTime(int $time): IIncomingSignedRequest;
 
@@ -49,7 +49,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 * get the time, extracted from the base request headers
 	 *
 	 * @return int
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getTime(): int;
 
@@ -59,7 +59,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 *
 	 * @param string $origin
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setOrigin(string $origin): IIncomingSignedRequest;
 
@@ -68,7 +68,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 * based on the keyId defined in the signature header.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOrigin(): string;
 
@@ -77,7 +77,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 * keyId is a mandatory entry in the headers of a signed request.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getKeyId(): string;
 
@@ -88,7 +88,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 *
 	 * @param string $signature
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setEstimatedSignature(string $signature): IIncomingSignedRequest;
 
@@ -98,7 +98,7 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	 * the public key of remote instance at the origin of the request.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getEstimatedSignature(): string;
 }

@@ -16,15 +16,15 @@ namespace OCP\Security\Signature\Model;
  * - TRUSTED = any changes of keypair will require human interaction, warning will be issued
  * - STATIC = error will be issued on conflict,  assume keypair cannot be reset.
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 enum SignatoryType: int {
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case FORGIVABLE = 1; // no notice on refresh
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case REFRESHABLE = 4; // notice on refresh
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case TRUSTED = 8; // warning on refresh
-	/** @since 30.0.0 */
+	/** @since 31.0.0 */
 	case STATIC = 9; // error on refresh
 }

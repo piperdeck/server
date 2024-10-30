@@ -26,7 +26,7 @@ use OCP\Security\Signature\Model\SignatoryType;
  * returns local signatory using IKeyPairManager
  * extract optional signatory (keyId+public key) from ocm discovery service on remote instance
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 class OCMSignatoryManager implements ISignatoryManager {
 	public const PROVIDER_ID = 'ocm';
@@ -42,7 +42,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 * @return string
 	 */
 	public function getProviderId(): string {
@@ -52,7 +52,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 * @return array
 	 */
 	public function getOptions(): array {
@@ -62,7 +62,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 * @return ISignatory
 	 */
 	public function getLocalSignatory(): ISignatory {
@@ -71,8 +71,8 @@ class OCMSignatoryManager implements ISignatoryManager {
 		} catch (SignatureIdentityNotFoundException) {
 			$url = $this->urlGenerator->linkToRouteAbsolute('cloud_federation_api.requesthandlercontroller.addShare');
 
-			$hostname = parse_url($url,PHP_URL_HOST);
-			$path = parse_url($url,PHP_URL_PATH);
+			$hostname = parse_url($url, PHP_URL_HOST);
+			$path = parse_url($url, PHP_URL_PATH);
 
 			// tries to create a keyId like 'https://hostname/subfolder/ocm#signature
 			$pos = strpos($path, '/ocm/shares');
@@ -100,7 +100,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	 *
 	 * @return ISignatory|null must be NULL if no signatory is found
 	 * @throws OCMProviderException on fail to discover ocm services
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getRemoteSignatory(IIncomingSignedRequest $signedRequest): ?ISignatory {
 		return $this->getRemoteSignatoryFromHost($signedRequest->getOrigin());
@@ -113,7 +113,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	 *
 	 * @return ISignatory|null
 	 * @throws OCMProviderException on fail to discover ocm services
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getRemoteSignatoryFromHost(string $host): ?ISignatory {
 		$ocmProvider = $this->ocmDiscoveryService->discover($host, true);

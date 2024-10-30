@@ -43,7 +43,7 @@ use OCP\Security\Signature\Model\ISignatory;
  *      listed in 'headers' and their value. Some elements (content-length date digest host) are mandatory
  *      to ensure authenticity override protection.
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface ISignatureManager {
 	/**
@@ -60,7 +60,7 @@ interface ISignatureManager {
 	 * @throws IncomingRequestException if anything looks wrong with the incoming request
 	 * @throws SignatureNotFoundException if incoming request is not signed
 	 * @throws SignatureException if signature could not be confirmed
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getIncomingSignedRequest(ISignatoryManager $signatoryManager, ?string $body = null): IIncomingSignedRequest;
 
@@ -74,7 +74,7 @@ interface ISignatureManager {
 	 * @param string $uri needed in the signature
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOutgoingSignedRequest(ISignatoryManager $signatoryManager, string $content, string $method, string $uri): IOutgoingSignedRequest;
 
@@ -88,7 +88,7 @@ interface ISignatureManager {
 	 * @param string $uri needed in the signature
 	 *
 	 * @return array new payload to be sent, including original payload and signature elements in headers
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function signOutgoingRequestIClientPayload(ISignatoryManager $signatoryManager, array $payload, string $method, string $uri): array;
 
@@ -100,7 +100,7 @@ interface ISignatureManager {
 	 *
 	 * @return ISignatory
 	 * @throws SignatoryNotFoundException if entry does not exist in local database
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function searchSignatory(string $host, string $account = ''): ISignatory;
 
@@ -111,7 +111,7 @@ interface ISignatureManager {
 	 *
 	 * @return string
 	 * @throws SignatureIdentityNotFoundException if hostname is not set
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function generateKeyId(string $path): string;
 }

@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace OC\Security\Signature\Model;
 
 use JsonSerializable;
+use OCP\Security\Signature\Exceptions\SignatoryNotFoundException;
 use OCP\Security\Signature\Model\ISignatory;
 use OCP\Security\Signature\Model\ISignedRequest;
 
 /**
  * @inheritDoc
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 class SignedRequest implements ISignedRequest, JsonSerializable {
 	private string $digest;
@@ -24,7 +25,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	private ?ISignatory $signatory = null;
 
 	public function __construct(
-		private readonly string $body
+		private readonly string $body,
 	) {
 		// digest is created on the fly using $body
 		$this->digest = 'SHA-256=' . base64_encode(hash('sha256', utf8_encode($body), true));
@@ -34,7 +35,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getBody(): string {
 		return $this->body;
@@ -44,7 +45,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getDigest(): string {
 		return $this->digest;
@@ -55,9 +56,9 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 *
 	 * @param array $signatureHeader
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setSignatureHeader(array $signatureHeader): self {
+	public function setSignatureHeader(array $signatureHeader): ISignedRequest {
 		$this->signatureHeader = $signatureHeader;
 		return $this;
 	}
@@ -66,7 +67,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getSignatureHeader(): array {
 		return $this->signatureHeader;
@@ -77,7 +78,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 *
 	 * @param string $signedSignature
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignedSignature(string $signedSignature): ISignedRequest {
 		$this->signedSignature = $signedSignature;
@@ -88,7 +89,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getSignedSignature(): string {
 		return $this->signedSignature;
@@ -99,7 +100,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 *
 	 * @param ISignatory $signatory
 	 * @return ISignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignatory(ISignatory $signatory): ISignedRequest {
 		$this->signatory = $signatory;
@@ -110,9 +111,14 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @throws SignatoryNotFoundException
+	 * @since 31.0.0
 	 */
 	public function getSignatory(): ISignatory {
+		if ($this->signatory === null) {
+			throw new SignatoryNotFoundException();
+		}
+
 		return $this->signatory;
 	}
 
@@ -120,7 +126,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 * @inheritDoc
 	 *
 	 * @return bool
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function hasSignatory(): bool {
 		return ($this->signatory !== null);

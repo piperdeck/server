@@ -15,7 +15,7 @@ use OCP\Security\PublicPrivateKeyPairs\Model\IKeyPair;
 /**
  * IKeyPairManager contains a group of method to create/manage/store internal public/private key pair.
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface IKeyPairManager {
 
@@ -29,7 +29,7 @@ interface IKeyPairManager {
 	 *
 	 * @return IKeyPair
 	 * @throws KeyPairConflictException if a key already exist
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function generateKeyPair(string $app, string $name, array $options = []): IKeyPair;
 
@@ -40,7 +40,7 @@ interface IKeyPairManager {
 	 * @param string $name key name
 	 *
 	 * @return bool TRUE if key pair exists in database
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function hasKeyPair(string $app, string $name): bool;
 
@@ -53,7 +53,7 @@ interface IKeyPairManager {
 	 *
 	 * @return IKeyPair
 	 * @throws KeyPairNotFoundException if key pair is not known
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getKeyPair(string $app, string $name): IKeyPair;
 
@@ -63,7 +63,7 @@ interface IKeyPairManager {
 	 * @param string $app appid
 	 * @param string $name key name
 	 *
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function deleteKeyPair(string $app, string $name): void;
 
@@ -73,7 +73,7 @@ interface IKeyPairManager {
 	 * @param IKeyPair $keyPair keypair to test
 	 *
 	 * @return bool
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function testKeyPair(IKeyPair $keyPair): bool;
 }

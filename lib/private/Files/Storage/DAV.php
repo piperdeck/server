@@ -104,7 +104,7 @@ class DAV extends Common {
 			if (isset($parameters['authType'])) {
 				$this->authType = $parameters['authType'];
 			}
- 			$this->verify = (($parameters['verify'] ?? true) !== false);
+			$this->verify = (($parameters['verify'] ?? true) !== false);
 			if (isset($parameters['secure'])) {
 				if (is_string($parameters['secure'])) {
 					$this->secure = ($parameters['secure'] === 'true');

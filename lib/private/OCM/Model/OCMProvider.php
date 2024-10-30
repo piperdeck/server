@@ -154,7 +154,7 @@ class OCMProvider implements IOCMProvider {
 		throw new OCMArgumentException('resource not found');
 	}
 
-	public function setSignatory(ISignatory $signatory){
+	public function setSignatory(ISignatory $signatory): void {
 		$this->signatory = $signatory;
 	}
 
@@ -173,8 +173,8 @@ class OCMProvider implements IOCMProvider {
 	 */
 	public function import(array $data): static {
 		$this->setEnabled(is_bool($data['enabled'] ?? '') ? $data['enabled'] : false)
-			 ->setApiVersion((string)($data['version'] ?? ''))
-			 ->setEndPoint($data['endPoint'] ?? '');
+			->setApiVersion((string)($data['version'] ?? ''))
+			->setEndPoint($data['endPoint'] ?? '');
 
 		$resources = [];
 		foreach (($data['resourceTypes'] ?? []) as $resourceData) {
@@ -204,18 +204,19 @@ class OCMProvider implements IOCMProvider {
 		return ($this->getApiVersion() !== '' && $this->getEndPoint() !== '');
 	}
 
-
 	/**
 	 * @return array{
-	 *     enabled: bool,
-	 *     apiVersion: string,
-	 *     endPoint: string,
-	 *     resourceTypes: array{
-	 *              name: string,
-	 *              shareTypes: string[],
-	 *              protocols: array<string, string>
-	 *            }[]
-	 *   }
+	 *      enabled: bool,
+	 *      apiVersion: '1.0-proposal1',
+	 *      endPoint: string,
+	 *      publicKey: ISignatory|null,
+	 *      resourceTypes: array{
+	 *          name: string,
+	 *          shareTypes: string[],
+	 *          protocols: array<string, string>
+	 *      }[],
+	 *      version: string
+	 *  }
 	 */
 	public function jsonSerialize(): array {
 		$resourceTypes = [];

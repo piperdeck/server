@@ -19,13 +19,11 @@ use OCP\Security\Signature\Model\ISignatory;
  * @inheritDoc
  *
  * @see ISignatureManager for details on signature
- * @since 30.0.0
+ * @since 31.0.0
  */
-class IncomingSignedRequest extends SignedRequest
-	implements
+class IncomingSignedRequest extends SignedRequest implements
 	IIncomingSignedRequest,
-	JsonSerializable
-{
+	JsonSerializable {
 	private ?IRequest $request = null;
 	private int $time = 0;
 	private string $origin = '';
@@ -38,7 +36,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @return $this
 	 * @throws SignatoryException
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setSignatory(ISignatory $signatory): self {
 		if (parse_url($signatory->getKeyId(), PHP_URL_HOST) !== $this->getOrigin()) {
@@ -54,7 +52,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @param IRequest $request
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setRequest(IRequest $request): IIncomingSignedRequest {
 		$this->request = $request;
@@ -66,7 +64,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @return IRequest
 	 * @throws IncomingRequestNotFoundException
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getRequest(): IRequest {
 		if ($this->request === null) {
@@ -80,7 +78,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @param int $time
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setTime(int $time): IIncomingSignedRequest {
 		$this->time = $time;
@@ -91,7 +89,7 @@ class IncomingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return int
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getTime(): int {
 		return $this->time;
@@ -102,7 +100,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @param string $origin
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setOrigin(string $origin): IIncomingSignedRequest {
 		$this->origin = $origin;
@@ -113,7 +111,7 @@ class IncomingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOrigin(): string {
 		return $this->origin;
@@ -124,7 +122,7 @@ class IncomingSignedRequest extends SignedRequest
 	 * keyId is a mandatory entry in the headers of a signed request.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getKeyId(): string {
 		return $this->getSignatureHeader()['keyId'] ?? '';
@@ -135,7 +133,7 @@ class IncomingSignedRequest extends SignedRequest
 	 *
 	 * @param string $signature
 	 * @return IIncomingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setEstimatedSignature(string $signature): IIncomingSignedRequest {
 		$this->estimatedSignature = $signature;
@@ -146,7 +144,7 @@ class IncomingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getEstimatedSignature(): string {
 		return $this->estimatedSignature;

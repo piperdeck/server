@@ -18,7 +18,6 @@ use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Capabilities\ICapability;
 use OCP\IAppConfig;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;

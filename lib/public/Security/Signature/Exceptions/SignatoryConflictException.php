@@ -8,10 +8,8 @@ declare(strict_types=1);
 
 namespace OCP\Security\Signature\Exceptions;
 
-use Exception;
-
 /**
- * @since 30.0.0
+ * @since 31.0.0
  */
 class SignatoryConflictException extends SignatoryException {
 }

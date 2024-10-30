@@ -14,17 +14,19 @@ use OCP\Security\Signature\Model\SignatoryStatus;
 use OCP\Security\Signature\Model\SignatoryType;
 
 class Signatory implements ISignatory, JsonSerializable {
-	private string $providerId = '', $account = '';
+	private string $providerId = '';
+	private string $account = '';
 	private SignatoryType $type = SignatoryType::STATIC;
 	private SignatoryStatus $status = SignatoryStatus::SYNCED;
 	private array $metadata = [];
-	private int $creation = 0, $lastUpdated = 0;
+	private int $creation = 0;
+	private int $lastUpdated = 0;
 
 	public function __construct(
 		private string $keyId,
 		private readonly string $publicKey,
 		private readonly string $privateKey = '',
-		readonly bool $local = false
+		readonly bool $local = false,
 	) {
 		// if set as local (for current instance), we apply some filters.
 		if ($local) {
@@ -127,12 +129,12 @@ class Signatory implements ISignatory, JsonSerializable {
 
 	public function importFromDatabase(array $row): self {
 		$this->setProviderId($row['provider_id'] ?? '')
-			 ->setAccount($row['account'] ?? '')
-			 ->setMetadata($row['metadata'] ?? [])
-			 ->setType(SignatoryType::from($row['type'] ?? 9))
-			 ->setStatus(SignatoryStatus::from($row['status'] ?? 1))
-			 ->setCreation($row['creation'] ?? 0)
-			 ->setLastUpdated($row['last_updated'] ?? 0);
+			->setAccount($row['account'] ?? '')
+			->setMetadata($row['metadata'] ?? [])
+			->setType(SignatoryType::from($row['type'] ?? 9))
+			->setStatus(SignatoryStatus::from($row['status'] ?? 1))
+			->setCreation($row['creation'] ?? 0)
+			->setLastUpdated($row['last_updated'] ?? 0);
 		return $this;
 	}
 

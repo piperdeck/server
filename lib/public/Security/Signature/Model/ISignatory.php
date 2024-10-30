@@ -15,7 +15,7 @@ namespace OCP\Security\Signature\Model;
  *
  * the pair providerId+host is unique, meaning only one signatory can exist for each host
  * and protocol
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface ISignatory {
 	/**
@@ -25,7 +25,7 @@ interface ISignatory {
 	 * @param string $providerId
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setProviderId(string $providerId): ISignatory;
 
@@ -33,7 +33,7 @@ interface ISignatory {
 	 * returns the provider id, unique string related to the ISignatoryManager
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getProviderId(): string;
 
@@ -43,7 +43,7 @@ interface ISignatory {
 	 * @param string $account
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setAccount(string $account): ISignatory;
 
@@ -51,7 +51,7 @@ interface ISignatory {
 	 * return account name, empty string if not set
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getAccount(): string;
 
@@ -59,7 +59,7 @@ interface ISignatory {
 	 * returns key id
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getKeyId(): string;
 
@@ -67,7 +67,7 @@ interface ISignatory {
 	 * returns public key
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPublicKey(): string;
 
@@ -75,7 +75,7 @@ interface ISignatory {
 	 * returns private key, if available
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPrivateKey(): string;
 
@@ -85,7 +85,7 @@ interface ISignatory {
 	 * @param array $metadata
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setMetadata(array $metadata): ISignatory;
 
@@ -93,7 +93,7 @@ interface ISignatory {
 	 * returns metadata
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getMetadata(): array;
 
@@ -104,7 +104,7 @@ interface ISignatory {
 	 * @param string|int $value
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setMetaValue(string $key, string|int $value): ISignatory;
 
@@ -114,7 +114,7 @@ interface ISignatory {
 	 * @param SignatoryType $type
 	 *
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setType(SignatoryType $type): ISignatory;
 
@@ -132,7 +132,7 @@ interface ISignatory {
 	 *
 	 * @see SignatoryStatus
 	 * @return ISignatory
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setStatus(SignatoryStatus $status): ISignatory;
 
@@ -141,7 +141,7 @@ interface ISignatory {
 	 *
 	 * @see SignatoryStatus
 	 * @return SignatoryStatus
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getStatus(): SignatoryStatus;
 

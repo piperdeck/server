@@ -12,7 +12,7 @@ namespace OCP\Security\Signature\Model;
  * extends ISignedRequest to add info requested at the generation of the signature
  *
  * @see ISignatureManager for details on signature
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface IOutgoingSignedRequest extends ISignedRequest {
 	/**
@@ -20,7 +20,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 *
 	 * @param string $host
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setHost(string $host): IOutgoingSignedRequest;
 
@@ -30,7 +30,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * - on outgoing request, this is the remote instance.
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getHost(): string;
 
@@ -41,7 +41,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * @param string|int|float|bool|array $value
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function addHeader(string $key, string|int|float|bool|array $value): IOutgoingSignedRequest;
 
@@ -49,7 +49,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * returns list of headers value that will be added to the base request
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getHeaders(): array;
 
@@ -59,7 +59,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * @param string $estimated
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setClearSignature(string $estimated): IOutgoingSignedRequest;
 
@@ -67,7 +67,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * returns the clear version of the signature
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getClearSignature(): string;
 
@@ -77,7 +77,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * @param string $algorithm
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setAlgorithm(string $algorithm): IOutgoingSignedRequest;
 
@@ -85,7 +85,7 @@ interface IOutgoingSignedRequest extends ISignedRequest {
 	 * returns the algorithm set to sign the signature
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getAlgorithm(): string;
 }

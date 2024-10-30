@@ -12,14 +12,14 @@ namespace OCP\Security\PublicPrivateKeyPairs\Model;
  * simple model that store key pair, its name, its origin (app)
  * and the options used during its creation
  *
- * @since 30.0.0
+ * @since 31.0.0
  */
 interface IKeyPair {
 	/**
 	 * returns id of the app owning the key pair
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getApp(): string;
 
@@ -27,7 +27,7 @@ interface IKeyPair {
 	 * returns name of the key pair
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getName(): string;
 
@@ -36,7 +36,7 @@ interface IKeyPair {
 	 *
 	 * @param string $publicKey
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setPublicKey(string $publicKey): IKeyPair;
 
@@ -44,7 +44,7 @@ interface IKeyPair {
 	 * returns public key
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPublicKey(): string;
 
@@ -53,7 +53,7 @@ interface IKeyPair {
 	 *
 	 * @param string $privateKey
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setPrivateKey(string $privateKey): IKeyPair;
 
@@ -61,7 +61,7 @@ interface IKeyPair {
 	 * returns private key
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getPrivateKey(): string;
 
@@ -70,7 +70,7 @@ interface IKeyPair {
 	 *
 	 * @param array $options
 	 * @return IKeyPair
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function setOptions(array $options): IKeyPair;
 
@@ -78,7 +78,7 @@ interface IKeyPair {
 	 * returns options
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getOptions(): array;
 }

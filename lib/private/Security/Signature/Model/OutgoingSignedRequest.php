@@ -11,11 +11,15 @@ namespace OC\Security\Signature\Model;
 use JsonSerializable;
 use OCP\Security\Signature\Model\IOutgoingSignedRequest;
 
-class OutgoingSignedRequest extends SignedRequest
-	implements
+/**
+ * extends ISignedRequest to add info requested at the generation of the signature
+ *
+ * @see ISignatureManager for details on signature
+ * @since 31.0.0
+ */
+class OutgoingSignedRequest extends SignedRequest implements
 	IOutgoingSignedRequest,
-	JsonSerializable
-{
+	JsonSerializable {
 	private string $host = '';
 	private array $headers = [];
 	private string $clearSignature = '';
@@ -26,9 +30,9 @@ class OutgoingSignedRequest extends SignedRequest
 	 *
 	 * @param string $host
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setHost(string $host): self {
+	public function setHost(string $host): IOutgoingSignedRequest {
 		$this->host = $host;
 		return $this;
 	}
@@ -37,7 +41,7 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getHost(): string {
 		return $this->host;
@@ -50,9 +54,9 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @param string|int|float|bool|array $value
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function addHeader(string $key, string|int|float|bool|array $value): self {
+	public function addHeader(string $key, string|int|float|bool|array $value): IOutgoingSignedRequest {
 		$this->headers[$key] = $value;
 		return $this;
 	}
@@ -61,7 +65,7 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return array
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getHeaders(): array {
 		return $this->headers;
@@ -73,9 +77,9 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @param string $estimated
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setClearSignature(string $estimated): self {
+	public function setClearSignature(string $estimated): IOutgoingSignedRequest {
 		$this->clearSignature = $estimated;
 		return $this;
 	}
@@ -84,7 +88,7 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getClearSignature(): string {
 		return $this->clearSignature;
@@ -96,9 +100,9 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @param string $algorithm
 	 *
 	 * @return IOutgoingSignedRequest
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
-	public function setAlgorithm(string $algorithm): self {
+	public function setAlgorithm(string $algorithm): IOutgoingSignedRequest {
 		$this->algorithm = $algorithm;
 		return $this;
 	}
@@ -107,7 +111,7 @@ class OutgoingSignedRequest extends SignedRequest
 	 * @inheritDoc
 	 *
 	 * @return string
-	 * @since 30.0.0
+	 * @since 31.0.0
 	 */
 	public function getAlgorithm(): string {
 		return $this->algorithm;

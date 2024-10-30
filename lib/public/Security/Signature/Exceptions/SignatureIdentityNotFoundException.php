@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCP\Security\Signature\Exceptions;
 
 /**
- * @since 30.0.0
+ * @since 31.0.0
  */
 class SignatureIdentityNotFoundException extends SignatureException {
 }

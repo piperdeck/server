@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace OC\OCM\Model;
 
+use OC\Security\Signature\Model\Signatory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\OCM\Events\ResourceTypeRegisterEvent;
 use OCP\OCM\Exceptions\OCMArgumentException;
 use OCP\OCM\Exceptions\OCMProviderException;
 use OCP\OCM\IOCMProvider;
 use OCP\OCM\IOCMResource;
+use OCP\Security\Signature\Model\ISignatory;
 
 /**
  * @since 28.0.0
@@ -25,7 +27,7 @@ class OCMProvider implements IOCMProvider {
 	private string $endPoint = '';
 	/** @var IOCMResource[] */
 	private array $resourceTypes = [];
-
+	private ?ISignatory $signatory = null;
 	private bool $emittedEvent = false;
 
 	public function __construct(
@@ -152,6 +154,14 @@ class OCMProvider implements IOCMProvider {
 		throw new OCMArgumentException('resource not found');
 	}
 
+	public function setSignatory(ISignatory $signatory){
+		$this->signatory = $signatory;
+	}
+
+	public function getSignatory(): ?ISignatory {
+		return $this->signatory;
+	}
+
 	/**
 	 * import data from an array
 	 *
@@ -163,8 +173,8 @@ class OCMProvider implements IOCMProvider {
 	 */
 	public function import(array $data): static {
 		$this->setEnabled(is_bool($data['enabled'] ?? '') ? $data['enabled'] : false)
-			->setApiVersion((string)($data['apiVersion'] ?? ''))
-			->setEndPoint($data['endPoint'] ?? '');
+			 ->setApiVersion((string)($data['version'] ?? ''))
+			 ->setEndPoint($data['endPoint'] ?? '');
 
 		$resources = [];
 		foreach (($data['resourceTypes'] ?? []) as $resourceData) {
@@ -172,6 +182,12 @@ class OCMProvider implements IOCMProvider {
 			$resources[] = $resource->import($resourceData);
 		}
 		$this->setResourceTypes($resources);
+
+		// import details about the remote request signing public key, if available
+		$signatory = new Signatory($data['publicKey']['keyId'] ?? '', $data['publicKey']['publicKeyPem'] ?? '');
+		if ($signatory->getKeyId() !== '' && $signatory->getPublicKey() !== '') {
+			$this->setSignatory($signatory);
+		}
 
 		if (!$this->looksValid()) {
 			throw new OCMProviderException('remote provider does not look valid');
@@ -209,8 +225,10 @@ class OCMProvider implements IOCMProvider {
 
 		return [
 			'enabled' => $this->isEnabled(),
-			'apiVersion' => $this->getApiVersion(),
+			'apiVersion' => '1.0-proposal1', // deprecated, but keep it to stay compatible with old version
+			'version' => $this->getApiVersion(), // informative but real version
 			'endPoint' => $this->getEndPoint(),
+			'publicKey' => $this->getSignatory(),
 			'resourceTypes' => $resourceTypes
 		];
 	}

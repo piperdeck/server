@@ -16,7 +16,7 @@ https://nextcloud.com/design/
 **TL;DR**
 
 1. Check out open [issues](https://github.com/nextcloud/server/issues) here on GitHub (we label them with `design`)
-2. Make sure create publicly accessible assets 
+2. Make sure to create publicly accessible assets 
 3. Add your contributions to an issue and we promise we will review your contribution carefully and foster discussions
 
 [This issue](https://github.com/nextcloud/desktop/issues/877) has examples of other apps, some simple mockups, and specifications about the design. In the discussions in the comments there are updates to the design as well.
